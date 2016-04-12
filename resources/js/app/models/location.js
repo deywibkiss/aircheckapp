@@ -9,10 +9,17 @@
 
 		,	idAttribute: "_id"
 
+		,	geoCodingKey: 'AIzaSyAr9JaJNwAqeHGkLUr2qq-Quo1xAK8FLG4'
+
 		,	defaults: {
 				_id: null,
-				lat: null,
-				lang: null
+				center: null,
+				marker: null,
+				callbacks: {
+					click: null,
+					setPosition: this.setPosition,
+					render: null
+				}
 			}
 
 		,	required: []
@@ -21,33 +28,51 @@
 
 		,	initialize: function(){
 
-				this.on( "invalid", this.onInvalid, this );
+				// Bind all events so this variable could
+	 			// be the model in function scopes
+	 			_.bindAll(
+	 				this,
+	 				'setPosition',
+	 				'setMarker',
+	 				'getGeoposition'
+	 			);
+
+				this.get('callbacks').setPosition = this.setPosition;
 
 			}
 
-		,	validate: function( attrs, options ){
-
-				this.errors = [];
-
-				misc.validateEmptyFields( this.required, attrs, this.errors );
-
-				if( this.errors.length > 0 ){
-
-					return 'fieldsRequired';
-				}
-
-				if( this.get( 'email' ) != '' && misc.isEmail( this.get( 'email' ) ) == false )
-					return 'invalidEmail';
-
-
-			}
-
-		,	onInvalid: function( model, error ){
+			/**
+			* Get the user geolocation and triggers a callback after that
+			*
+			*/
+		,	getGeoposition: function( notificationCallback ) {
 
 				var _this = this;
 
-				return alert( _this.lang[error] );
+				if ( navigator.geolocation ) {
+					
+					navigator.geolocation.getCurrentPosition( _this.get('callbacks').setPosition, function(){ alert( 'error!' ); } );
 
+				} else {
+					
+					if( typeof notificationCallback == 'function' )
+						return notificationCallback.call();
+				}
+			}
+
+
+		,	setPosition: function(position){
+
+				this.set('center', new google.maps.LatLng( position.coords.latitude, position.coords.longitude ));
+			}
+
+		,	setMarker: function( map ){
+
+				this.set('marker', new google.maps.Marker({
+					position: this.get('center'),
+					map: map,
+					title: 'Hello World!'
+				}));
 			}
 
 	});

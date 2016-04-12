@@ -163,10 +163,17 @@ window.Aircheck.app = {
 
 		,	idAttribute: "_id"
 
+		,	geoCodingKey: 'AIzaSyAr9JaJNwAqeHGkLUr2qq-Quo1xAK8FLG4'
+
 		,	defaults: {
 				_id: null,
-				lat: null,
-				lang: null
+				center: null,
+				marker: null,
+				callbacks: {
+					click: null,
+					setPosition: this.setPosition,
+					render: null
+				}
 			}
 
 		,	required: []
@@ -175,33 +182,51 @@ window.Aircheck.app = {
 
 		,	initialize: function(){
 
-				this.on( "invalid", this.onInvalid, this );
+				// Bind all events so this variable could
+	 			// be the model in function scopes
+	 			_.bindAll(
+	 				this,
+	 				'setPosition',
+	 				'setMarker',
+	 				'getGeoposition'
+	 			);
+
+				this.get('callbacks').setPosition = this.setPosition;
 
 			}
 
-		,	validate: function( attrs, options ){
-
-				this.errors = [];
-
-				misc.validateEmptyFields( this.required, attrs, this.errors );
-
-				if( this.errors.length > 0 ){
-
-					return 'fieldsRequired';
-				}
-
-				if( this.get( 'email' ) != '' && misc.isEmail( this.get( 'email' ) ) == false )
-					return 'invalidEmail';
-
-
-			}
-
-		,	onInvalid: function( model, error ){
+			/**
+			* Get the user geolocation and triggers a callback after that
+			*
+			*/
+		,	getGeoposition: function( notificationCallback ) {
 
 				var _this = this;
 
-				return alert( _this.lang[error] );
+				if ( navigator.geolocation ) {
+					
+					navigator.geolocation.getCurrentPosition( _this.get('callbacks').setPosition, function(){ alert( 'error!' ); } );
 
+				} else {
+					
+					if( typeof notificationCallback == 'function' )
+						return notificationCallback.call();
+				}
+			}
+
+
+		,	setPosition: function(position){
+
+				this.set('center', new google.maps.LatLng( position.coords.latitude, position.coords.longitude ));
+			}
+
+		,	setMarker: function( map ){
+
+				this.set('marker', new google.maps.Marker({
+					position: this.get('center'),
+					map: map,
+					title: 'Hello World!'
+				}));
 			}
 
 	});
@@ -393,6 +418,80 @@ window.Aircheck.app = {
  */
  ( function( $, window, document, app ){
 
+ 	var MapView = Backbone.View.extend({
+
+ 			el: $( 'body' )
+
+ 		,	events: {
+ 			}
+
+ 		,	model: new app.models.location
+
+ 		,	map: null
+
+ 		,	canvas: $('#map-canvas')[0]
+
+ 		,	initialize: function(){
+
+	 			// Bind all events so this variable could
+	 			// be the view in function scopes
+	 			_.bindAll(
+
+	 				this,
+	 				'render'
+	 			);
+
+				this.model.on("change:center", this.render, this);
+ 				this.model.get('callbacks').click = this.click;
+ 			}
+
+
+ 		,	setCanvas: function( callback ){
+ 				var html = new EJS({ url: templatePath + 'map/default.ejs'}).render({});
+ 				content.html(html);
+
+ 				if( typeof callback == 'function')
+ 					callback.call();
+ 			}
+
+
+ 			/**
+ 			* Shows the login page
+ 			*
+ 			*/
+ 		,	render: function(){
+
+				this.map = new google.maps.Map( this.canvas, {
+					center: this.model.get('center'),
+					zoom: 17
+				});
+
+				this.model.setMarker( this.map );
+
+ 			}
+
+ 		,	click: function(e){
+
+ 			}
+
+ 	});
+
+
+ 	app.views.map = new MapView();
+
+
+ })(jQuery, this, this.document, window.Aircheck.app, undefined);
+/*
+ |--------------------------------------------------------------------------
+ | User View
+ |--------------------------------------------------------------------------
+ |
+ | Allows to control de GUI interaction of user
+ |
+ |
+ */
+ ( function( $, window, document, app ){
+
  	var UserView = Backbone.View.extend({
 
  			el: $( 'body' )
@@ -434,6 +533,46 @@ window.Aircheck.app = {
 
 
  })(jQuery, this, this.document, window.Aircheck.app, undefined);
+/*
+ |--------------------------------------------------------------------------
+ | Map Router
+ |--------------------------------------------------------------------------
+ |
+ | Allows to control de URL routes and triggers specific functions
+ | in the map interface
+ |
+ |
+ */
+( function( $, window, document, app ){
+
+    var MapRouter = Backbone.Router.extend({
+
+            /**
+            * Define the user routes
+            *
+            */
+            routes: {
+                "map": "renderMap"
+            }
+
+        ,   initialize: function(){
+
+            }
+
+        ,   renderMap: function(){
+
+                app.views.map.setCanvas( function(){
+                    app.views.map.model.getGeoposition();
+                });
+            }
+
+    });
+
+
+    app.routers.map = new MapRouter();
+
+
+})( jQuery, this, this.document, window.Aircheck.app, undefined );
 /*
  |--------------------------------------------------------------------------
  | User Router
