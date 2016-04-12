@@ -1,0 +1,48 @@
+/**
+* Main Stylesheet for global element tags
+*
+* Modify this stylesheet in order to stylizing the global element and
+* shared styles
+*
+* Author: Brian Serrano.
+* Author email: brayan.serrano@pulzo.com
+* Modified date: 2016-03-18
+*
+*/
+
+*
+{
+	text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    padding: 0;
+    margin: 0;
+}
+
+body, html {
+	background-color: @white;
+	height: 100%;
+	font-family: @base-font;
+}
+
+.container-fluid {
+	height: 100%;
+	overflow-y: hidden;
+
+	.row {
+		height: 100%;
+
+		> * { height: 100%; overflow-y: auto; }
+	}
+}
+
+
+.clear { clear: both; }
+
+// Lists
+ul.no-list {
+	list-style: none;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}

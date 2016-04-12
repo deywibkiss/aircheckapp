@@ -1,0 +1,22 @@
+/**
+* Mixins for responsiveness
+*
+* Modify this stylesheet in order to change the responsiveness in page.
+*
+* Author: Brian Serrano.
+* Author email: brayan.serrano@pulzo.com
+* Modified date: 2016-03-14
+*
+*/
+.breakpoint( @resolution; @rules ){
+
+	@media only screen and (max-width: @resolution) {
+		@rules();
+	}
+}
+
+.breakpoint( @rule; @rules ){
+	@media @rule {
+		@rules();
+	}
+}

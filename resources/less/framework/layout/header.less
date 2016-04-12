@@ -1,0 +1,161 @@
+/**
+* Main Stylesheet for header
+*
+* Modify this stylesheet in order to stylizing the header (not menu)
+*
+* Author: Brian Serrano.
+* Author email: brayan.serrano@pulzo.com
+* Modified date: 2016-03-08
+*
+*/
+
+.pulzo-header {
+	position: fixed;
+	width: 100%;
+	background-color: @pulzo-black;
+	color: @pulzo-white;
+	z-index: @header-zindex;
+
+	a { color: @pulzo-white; }
+
+	#pulzo-logo-column { border-left: 1px solid @pulzo-dark-gray; }
+
+	#logo-space {
+		padding: 12px 0 5px 10px;
+
+		a {
+			display: inline-block;
+			padding-left:8px; 
+			img { width: auto; }
+
+		}
+
+		.breakpoint( @resMobile, {
+			padding: 0;
+
+			a {
+				padding: 6px 0 6px 10px;
+				img { width: 115px; }
+			}
+		});
+	}
+
+	#pulzo-header-sections-container {
+		position: relative;
+		padding: 30px 0;
+		text-align: right;
+		vertical-align: top;
+
+		ul {
+			position: absolute;
+			top: 0;
+			right: 0;
+			height: 100%;
+
+			li {
+				display: inline-block;
+				padding: 19px 10px;
+
+				.breakpoint( @resDesktopWide, { padding: 19px 5px; });
+
+				a {
+					color: @pulzo-white;
+					font-size: 1.1em;
+					font-weight: 500;
+
+					&:hover { text-decoration: underline; }
+
+					.breakpoint( @resDesktopWide, { font-size: 1em; });
+				}
+			}
+		}
+	}
+
+	.button-space {
+		padding: 12px 0;
+    	display: inline-block;
+    	width: 45%;
+    	margin: 0 auto;
+    	text-align: center;
+
+
+		a { font-size: 1.6em; }
+		i { line-height: 1.5em; }
+
+		.breakpoint( @resMobile, {
+			padding: 7px 18px;
+
+			a {
+				font-size: 1.7em;
+			}
+		});
+	}
+
+
+	.pulzo-search-form{
+		display: none;
+		padding: 0;
+		position: absolute;
+		top: 49px;
+	    right: 0;
+	    width: 320px;
+	    border: 3px solid @pulzo-black;
+    	
+    	.breakpoint( @resIpad, {
+    		width: 100%;
+    	});
+
+		#pulzo-header-search-form{
+		    background: #fff;
+		    color: #fff;
+		    height: 33px;
+	    	padding: 0 0 0 16px;
+		    position: relative;
+		    transition: .3s ease;
+		    -webkit-transition: .3s ease;
+		    width: 100%;
+		    background-clip: padding-box;
+
+			&:after{
+				content: 'buscar';
+				text-transform: uppercase;
+				font-family: @pulzo-font-sans;
+			    position: absolute;
+			    right: 0em;
+			    line-height: 2em;
+	   			padding-left: 12px;
+			    background-color: #d24036;
+			    width: 72px;
+			    height: 100%;
+			}
+			#googlesearch2{
+				background-color: #fff;
+	  			border: 0;
+	  			color: #808080;
+	  			display: inline-block;
+	  			height: 32px;
+	  			font-size: 1.1em;
+				line-height: 1.8em;
+	  			opacity: 1;
+	  			width: 90%;
+			}
+			
+			.form-submit{
+				display: inline-block;
+			    background-color: transparent;
+			    border: 0;
+			    background-size: 24px 24px;
+			    cursor: pointer;
+			    color: #333;
+			    height: 26px;
+			    position: absolute;
+			    right: 0em;
+			    text-indent: -999999px;
+			    width: 88px;
+			    height: 100%;
+			    -webkit-appearance: none;
+			    z-index: 1;
+			}
+		}
+	}
+}

@@ -1,0 +1,29 @@
+/**
+* Mixins for text and font
+*
+* Modify this stylesheet in order to change the appearance text.
+*
+* Author: Brian Serrano.
+* Author email: brayan.serrano@pulzo.com
+* Modified date: 2016-03-08
+*
+*/
+
+.font-size(@size){
+	font-size: unit( @size * 10, px);
+	font-size: unit(@size, rem);
+}
+
+
+.pulzo-icon( @content ){
+	font-family: "pulzo" !important;
+	font-weight: 400!important;
+	text-transform: none!important;
+	line-height: 1;
+	font-style: normal!important;
+    font-variant: normal!important;
+    speak: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+	content: @content;
+}

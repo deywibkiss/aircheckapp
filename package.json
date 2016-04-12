@@ -1,0 +1,39 @@
+{
+  "name": "Aircheck",
+  "version": "1.0.0",
+  "description": "Aircheck mobile app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/deywibkiss/aircheckapp.git"
+  },
+  "keywords": [
+    "Backbone",
+    "MVC",
+    "NASA"
+  ],
+  "author": [
+    "Brayan Serrano <brayan.serrano@pulzo.com>",
+    "Nicolás Murte <nicolas.murte@pulzo.com>",
+    "Arturo Verbel <arturo-verbel@hotmail.com>"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/deywibkiss/aircheckapp/issues"
+  },
+  "homepage": "https://github.com/deywibkiss/aircheckapp",
+  "dependencies": {
+    "gulp": "latest",
+    "gulp-concat": "^2.6.0",
+    "gulp-filter": "^4.0.0",
+    "gulp-less": "^3.0.5",
+    "gulp-livereload": "^3.8.1",
+    "gulp-plumber": "^1.1.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-uglify": "^1.5.3",
+    "gulp-util": "^3.0.7",
+    "gulp-watch": "^4.3.5",
+    "less-plugin-autoprefix": "^1.5.*",
+    "less-plugin-clean-css": "^1.5.*"
+  }
+}
