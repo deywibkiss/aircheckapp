@@ -1,0 +1,13 @@
+// Fonts
+.font-size(@size){
+	font-size: unit( @size * 10, px);
+	font-size: unit(@size, rem);
+}
+// Opacity
+
+.opacity(@opacity) {
+  opacity: @opacity;
+  // IE8 filter
+  @opacity-ie: (@opacity * 100);
+  filter: ~"alpha(opacity=@{opacity-ie})";
+}

@@ -97,7 +97,7 @@ gulp.task('css-less-app', function() {
 
 gulp.task('watch', function() {
     livereload.listen();
-    gulp.watch([pStylesOrigin + '/**/*.less'], ['css-less-app', 'css-less-framework']);
+    gulp.watch([pStylesOrigin + '/**/*.less'], ['css-less-app']);
     gulp.watch([pAppOrigin + '/**/*.js'], ['js-backbone-app']);
 });
 

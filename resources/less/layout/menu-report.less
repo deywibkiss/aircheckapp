@@ -1,0 +1,69 @@
+/**
+* Main Stylesheet for menu report
+*
+* Modify this stylesheet in order to stylizing the global menu report
+*
+*
+*/
+#aircheck-report-menu {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	text-align: center;
+	z-index: @z-index-menu;
+	transition: transform 0.3s;
+	transform: translateY(calc(100% - 28px));
+
+	&.active { transform: translateY(0); }
+
+
+	#toggle-report-menu-button {
+		display: inline-block;
+		padding: 5px 0;
+		width: 90%;
+		margin: 0 auto;
+		background-color: @dark-gray;
+		color: @white;
+
+		border-top-left-radius: 35px;
+		border-top-right-radius: 35px;
+
+		.font-size(1.8);
+	}
+}
+
+#aircheck-report-submenu {
+	padding: 12px;
+	float: left;
+	width: 100%;
+	background-color: @gray;
+
+	ul {
+		text-align: center;
+
+		li {
+			display: inline-block;
+			margin: 10px;
+		}
+	}
+
+	a {
+		display: inline-block;
+		max-width: 55px;
+		color: @white;
+		line-height: 0;
+		font-weight: @font-normal;
+
+		> * { display: inline-block; width: 100%; }
+
+		i {
+			padding: 10px 10px 24px;
+			border: 2px solid @white;
+			border-radius: 100%;
+			.font-size(1.8);
+			line-height: 0;
+		}
+
+		span { margin-top: 15px; }
+	}
+}

@@ -17,7 +17,7 @@
             *
             */
             routes: {
-                "update": "renderUpdateForm"
+                "": "renderUpdateForm"
             }
 
         ,   initialize: function(){
