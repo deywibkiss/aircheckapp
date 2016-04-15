@@ -245,7 +245,6 @@ window.Aircheck.app = {
 
 		,	defaults: {
 				_id: null,
-				key: null,
 				name: '',
 				age: 18,
 				email: '',
@@ -435,8 +434,13 @@ window.Aircheck.app = {
 	 			_.bindAll(
 
 	 				this,
-	 				'toggleMenu'
+	 				'toggleMenu',
+	 				'panReportMenu',
+	 				'swipeHideMenu'
 	 			);
+
+	 			this.panReportMenu();
+	 			this.swipeHideMenu();
  			}
 
 
@@ -448,6 +452,46 @@ window.Aircheck.app = {
  		,	toggleReportMenu: function(e){
 
  				$('#aircheck-report-menu').toggleClass('active');
+ 			}
+
+ 		,	panReportMenu: function(){
+ 				
+ 				var reportButton = document.getElementById('aircheck-report-menu');
+
+ 				// create a simple instance
+ 				// by default, it only adds horizontal recognizers
+ 				var mc = new Hammer(reportButton);
+
+ 				// let the pan gesture support all directions.
+ 				// this will block the vertical scrolling on a touch-device while on the element
+ 				mc.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+
+ 				// listen to events...
+ 				mc.on("panup", function(ev) {
+ 				    $('#aircheck-report-menu').addClass('active');
+ 				});
+
+ 				mc.on("pandown", function(ev) {
+ 				    $('#aircheck-report-menu').removeClass('active');
+ 				});
+
+ 			}
+
+ 		,	swipeHideMenu: function(){
+ 				var menu = document.getElementById('aircheck-menu-aside');
+
+ 				// create a simple instance
+ 				// by default, it only adds horizontal recognizers
+ 				var mc = new Hammer(menu);
+
+ 				// let the pan gesture support all directions.
+ 				// this will block the vertical scrolling on a touch-device while on the element
+ 				mc.get('swipe').set({ direction: Hammer.DIRECTION_ALL });
+
+ 				// listen to events...
+ 				mc.on("swipeleft", function(ev) {
+ 				    $('#aircheck-menu-aside').removeClass('active');
+ 				});
  			}
 
  	});
@@ -558,7 +602,7 @@ window.Aircheck.app = {
 	 			_.bindAll(
 
 	 				this,
-	 				'renderUpdateForm'
+	 				'renderRegisterForm'
 	 			);
  			}
 
@@ -567,11 +611,11 @@ window.Aircheck.app = {
  			* Shows the login page
  			*
  			*/
- 		,	renderUpdateForm: function(){
+ 		,	renderRegisterForm: function(){
 
  				var _this = this;	
 
- 				var html = new EJS({ url: templatePath + 'user/form-update.ejs'}).render({});
+ 				var html = new EJS({ url: templatePath + 'user/form-register.ejs'}).render({});
  				content.html(html);
 
  			}
@@ -642,16 +686,16 @@ window.Aircheck.app = {
             *
             */
             routes: {
-                "": "renderUpdateForm"
+                "profile/register": "renderRegisterForm"
             }
 
         ,   initialize: function(){
 
             }
 
-        ,   renderUpdateForm: function(){
+        ,   renderRegisterForm: function(){
 
-                app.views.user.renderUpdateForm();
+                app.views.user.renderRegisterForm();
             }
 
     });

@@ -17,16 +17,16 @@
             *
             */
             routes: {
-                "": "renderUpdateForm"
+                "profile/register": "renderRegisterForm"
             }
 
         ,   initialize: function(){
 
             }
 
-        ,   renderUpdateForm: function(){
+        ,   renderRegisterForm: function(){
 
-                app.views.user.renderUpdateForm();
+                app.views.user.renderRegisterForm();
             }
 
     });

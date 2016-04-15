@@ -11,7 +11,6 @@
 
 		,	defaults: {
 				_id: null,
-				key: null,
 				name: '',
 				age: 18,
 				email: '',

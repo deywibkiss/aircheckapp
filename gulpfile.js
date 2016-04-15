@@ -37,6 +37,8 @@ gulp.task('js-libs', function(){
     return gulp.src([
 
         pLibsOrigin + 'jquery.js',
+        pLibsOrigin + 'hammer.min.js',
+        pLibsOrigin + 'jquery.hammer.js',
         pLibsOrigin + 'underscore-min.js',
         pLibsOrigin + 'backbone-min.js',
         pLibsOrigin + 'ejs.js',

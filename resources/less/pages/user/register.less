@@ -1,0 +1,42 @@
+#content-wrapper {
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#30f4d9+0,137692+50,18455d+100 */
+	background: rgb(48,244,217); /* Old browsers */
+	background: -moz-linear-gradient(-45deg,  rgba(48,244,217,1) 0%, rgba(19,118,146,1) 50%, rgba(24,69,93,1) 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(-45deg,  rgba(48,244,217,1) 0%,rgba(19,118,146,1) 50%,rgba(24,69,93,1) 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(135deg,  rgba(48,244,217,1) 0%,rgba(19,118,146,1) 50%,rgba(24,69,93,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#30f4d9', endColorstr='#18455d',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+
+}
+
+#user-profile-register-form {
+	padding: 20px;
+	text-align: center;
+
+	.placeholder({
+		color: @white;
+		font-weight: @font-normal;
+		.opacity(1);
+	});
+
+
+	.user-image {
+		display: inline-block;
+		margin: 10px auto;
+		padding: 10px;
+		background-color: @white;
+		.square(120px);
+		max-width: 110px;
+		max-height: 110px;
+		text-align: center;
+		border-radius: 100%;
+		box-shadow: 0 0 0 1px @gray, inset 0 0 3px 1px @black;
+
+		i {
+			display: inline-block;
+			max-width: 100px;
+			max-height: 100px;
+			line-height: normal;
+			.font-size(5);
+		}
+	} 
+}

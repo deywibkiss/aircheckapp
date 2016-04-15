@@ -25,7 +25,7 @@
 	 			_.bindAll(
 
 	 				this,
-	 				'renderUpdateForm'
+	 				'renderRegisterForm'
 	 			);
  			}
 
@@ -34,11 +34,11 @@
  			* Shows the login page
  			*
  			*/
- 		,	renderUpdateForm: function(){
+ 		,	renderRegisterForm: function(){
 
  				var _this = this;	
 
- 				var html = new EJS({ url: templatePath + 'user/form-update.ejs'}).render({});
+ 				var html = new EJS({ url: templatePath + 'user/form-register.ejs'}).render({});
  				content.html(html);
 
  			}

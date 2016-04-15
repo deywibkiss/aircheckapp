@@ -1,0 +1,21 @@
+.btn {
+	padding: 12px 10px;
+	display: inline-block;
+	width: 80%;
+	margin: 15px auto;
+	border-radius: 12px;
+	font-weight: @font-normal;
+	.font-size(1.1);
+	text-transform: uppercase;
+	box-shadow: 1px 1px 3px fadeout(@black, 50%);
+
+	&.btn-default {
+		background-color: @white;
+		color: @gray;
+
+		&:hover, &:active, &:focus {
+			box-shadow: inset 0 0 2px 1px @black;
+		}
+	}
+
+}
