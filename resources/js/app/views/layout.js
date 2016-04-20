@@ -41,9 +41,18 @@
  				$('#aircheck-menu-aside').toggleClass('active');
  			}
 
+
+ 		,	hideMenu: function(){
+ 				$('#aircheck-menu-aside').removeClass('active');	
+ 			}
+
  		,	toggleReportMenu: function(e){
 
  				$('#aircheck-report-menu').toggleClass('active');
+ 			}
+
+ 		,	hideReportMenu: function(){
+ 				$('#aircheck-report-menu').removeClass('active');
  			}
 
  		,	panReportMenu: function(){

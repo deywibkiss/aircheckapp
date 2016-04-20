@@ -41,6 +41,7 @@ gulp.task('js-libs', function(){
         pLibsOrigin + 'jquery.hammer.js',
         pLibsOrigin + 'underscore-min.js',
         pLibsOrigin + 'backbone-min.js',
+        pLibsOrigin + 'backbone.routefilter.min.js',
         pLibsOrigin + 'ejs.js',
         pLibsOrigin + 'view.js'
     ])
@@ -56,6 +57,9 @@ gulp.task('js-backbone-app', function(){
         // Main app
         pAppOrigin + 'app.js',
 
+        // Helpers
+        pAppOrigin + 'helpers/*.js',
+
         // Collections
         pAppOrigin + 'collections/*.js',
 
@@ -70,7 +74,9 @@ gulp.task('js-backbone-app', function(){
         pAppOrigin + 'views/*.js',
 
         // Routers
-        pAppOrigin + 'routers/*.js'
+        pAppOrigin + 'routers/main.js',
+        pAppOrigin + 'routers/user.js',
+        pAppOrigin + 'routers/map.js'
 
     ])
     .pipe(gp_concat('aircheck-app.js'))

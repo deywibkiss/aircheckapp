@@ -1,4 +1,4 @@
-( function($, window, document, app ){
+( function($, window, document, app, helper ){
 	
 
 	'use-strict';
@@ -10,7 +10,6 @@
 		,	idAttribute: "_id"
 
 		,	defaults: {
-				_id: null,
 				name: '',
 				age: 18,
 				email: '',
@@ -22,14 +21,33 @@
 		,	required: [
 				'name',
 				'age',
-				'email'
+				'email',
+				'location'
 			]
 
 		,	errors: []
 
+		,	errorMessages: {
+				'fieldsRequired': 'Todos los campos son requeridos para el registro',
+				'invalidEmail': 'El email es incorrecto',
+				'invalidAge': 'La edad debe ser sólo números'
+			}
+
 		,	initialize: function(){
 
+				// Bind all functions so this variable could
+				// be the model in function scopes
+				_.bindAll(
+
+					this,
+					'setLocation'
+				);
+
 				this.on( "invalid", this.onInvalid, this );
+
+				this.get('location').get('callbacks').setPosition = this.setLocation;
+				this.get('location').getGeoposition();
+
 
 			}
 
@@ -37,15 +55,18 @@
 
 				this.errors = [];
 
-				misc.validateEmptyFields( this.required, attrs, this.errors );
+				helper.validateEmptyFields( this.required, attrs, this.errors );
 
 				if( this.errors.length > 0 ){
 
 					return 'fieldsRequired';
 				}
 
-				if( this.get( 'email' ) != '' && misc.isEmail( this.get( 'email' ) ) == false )
+				if( this.get( 'email' ) != '' && helper.isEmail( this.get( 'email' ) ) == false )
 					return 'invalidEmail';
+
+				if( this.get( 'age' ) != '' && helper.isNumeric( this.get( 'age' ) ) == false )
+					return 'invalidAge';
 
 
 			}
@@ -54,10 +75,16 @@
 
 				var _this = this;
 
-				return alert( _this.lang[error] );
+				return alert( _this.errorMessages[error] );
 
+			}
+
+		,	setLocation: function(position){
+
+				// Set position in json format
+				this.get('location').set('center', {lat: position.coords.latitude, lng: position.coords.longitude});
 			}
 
 	});
 
-})(jQuery, this, this.document, window.Aircheck.app, undefined);
+})(jQuery, this, this.document, window.Aircheck.app, window.Aircheck.app.helpers.main, undefined);

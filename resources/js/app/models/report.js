@@ -10,11 +10,10 @@
 		,	idAttribute: "_id"
 
 		,	defaults: {
-				_id: null,
-				type: new app.models.reportType,
-				user: new app.models.user,
-				location: new app.models.location,
-				timestamp: null
+				type: '',
+				subtype: '',
+				user: null,
+				location: {}
 			}
 
 		,	required: []
@@ -29,26 +28,26 @@
 
 		,	validate: function( attrs, options ){
 
-				this.errors = [];
+				// this.errors = [];
 
-				misc.validateEmptyFields( this.required, attrs, this.errors );
+				// misc.validateEmptyFields( this.required, attrs, this.errors );
 
-				if( this.errors.length > 0 ){
+				// if( this.errors.length > 0 ){
 
-					return 'fieldsRequired';
-				}
+				// 	return 'fieldsRequired';
+				// }
 
-				if( this.get( 'email' ) != '' && misc.isEmail( this.get( 'email' ) ) == false )
-					return 'invalidEmail';
+				// if( this.get( 'email' ) != '' && misc.isEmail( this.get( 'email' ) ) == false )
+				// 	return 'invalidEmail';
 
 
 			}
 
 		,	onInvalid: function( model, error ){
 
-				var _this = this;
+				// var _this = this;
 
-				return alert( _this.lang[error] );
+				// return alert( _this.lang[error] );
 
 			}
 

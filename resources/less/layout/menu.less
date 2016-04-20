@@ -13,15 +13,16 @@
 	z-index: @z-index-menu;
 
 	.menu-button {
+		color: lighten(@black, 50%);
 		padding: 8px;
 		line-height: 0;
-		.font-size(2.2);
+		.font-size(2);
 	}
 }
 
 #aircheck-menu-aside {
 	position: fixed;
-	width: 90%;
+	width: 60%;
 	height: 100%;
 	max-width: 320px;
 	padding: 12px;
@@ -34,4 +35,25 @@
 	overflow-y: auto;
 
 	&.active { transform: translateX(0); }
+	
+	ul , li, a { display: inline-block; width: 100%; }
+
+	a {
+		display: inline-block;
+		padding: 12px;
+		border-bottom: 0.5px solid @light-gray;
+		font-weight: @font-normal;
+		.font-size(1.1);
+		color: @gray;
+
+		> * { display: inline-block; vertical-align: middle; }
+
+		i {
+			margin-right: 5px;
+			line-height: normal;
+			max-height: 25px;
+			.font-size(1.8);
+		}
+
+	}
 }

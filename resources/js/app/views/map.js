@@ -14,6 +14,7 @@
  			el: $( 'body' )
 
  		,	events: {
+ 				'click #map-button': 'showMapLayers'
  			}
 
  		,	model: new app.models.location
@@ -38,6 +39,7 @@
 
 
  		,	setCanvas: function( callback ){
+
  				var html = new EJS({ url: templatePath + 'map/default.ejs'}).render({});
  				content.html(html);
 
@@ -52,6 +54,8 @@
  			*/
  		,	render: function(){
 
+ 				this.canvas = $('#map-canvas')[0];
+
 				this.map = new google.maps.Map( this.canvas, {
 					center: this.model.get('center'),
 					zoom: 17
@@ -63,6 +67,17 @@
 
  		,	click: function(e){
 
+ 			}
+
+
+ 		,	showMapLayers: function(e){
+
+ 				e.preventDefault();
+ 				
+ 				// Show all the map layers
+ 				var layers = new EJS({url: templatePath + 'map/layers.ejs'}).render();
+
+ 				submenu.html(layers);
  			}
 
  	});

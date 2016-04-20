@@ -17,24 +17,48 @@
             *
             */
             routes: {
-                "profile/register": "renderRegisterForm"
+                "user/register": "renderRegisterForm",
+                "user/logout": "renderLogout"
             }
 
         ,   initialize: function(){
 
             }
 
+        ,   before: {
+                'user/register': function(route){
+                    if( localStorage.getItem('_id') != null ) {
+                        this.navigate('user/logout', {trigger: true});
+                        return false;
+                    }
+                },
+
+                'user/logout': function(route){
+                    if( ! localStorage.getItem('_id') ) {
+                        this.navigate('user/register', {trigger: true});
+                        return false;
+                    }
+                }
+
+            }
+
         ,   renderRegisterForm: function(){
 
+                app.views.layout.hideMenu();
+                app.views.layout.hideReportMenu();
                 app.views.user.renderRegisterForm();
+            }
+
+        ,   renderLogout: function(){
+                app.views.layout.hideMenu();
+                app.views.layout.hideReportMenu();
+                app.views.user.renderLogout();
             }
 
     });
 
 
     app.routers.user = new UserRouter();
-
-    Backbone.history.start();
 
 
 })( jQuery, this, this.document, window.Aircheck.app, undefined );
