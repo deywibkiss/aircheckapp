@@ -4,7 +4,7 @@
 */
 
 // Static
-var apiURL = 'http://localhost:1337/';
+var apiURL = 'http://aircheck.cloudapp.net:8080/';
 var templatePath = 'js/templates/';
 var content = $('#aircheck-main-content');
 var submenu = $('#aircheck-report-submenu');
@@ -1214,7 +1214,6 @@ window.Aircheck.app = {
 				name: '',
 				age: 18,
 				email: '',
-				picture: 'users/default.jpg',
 				symptoms: new app.collections.symptoms,
 				location: new app.models.location
 			}
@@ -1283,7 +1282,7 @@ window.Aircheck.app = {
 		,	setLocation: function(position){
 
 				// Set position in json format
-				this.get('location').set('center', {lat: position.coords.latitude, lng: position.coords.longitude});
+				this.set('location', {latitude: position.coords.latitude, longitude: position.coords.longitude});
 			}
 
 	});
@@ -1355,11 +1354,10 @@ window.Aircheck.app = {
 		,	idAttribute: "_id"
 
 		,	defaults: {
-				_id: null,
-				type: new app.models.reportType,
-				user: new app.models.user,
-				location: new app.models.location,
-				timestamp: null
+				type: '',
+				subtype: '',
+				user: null,
+				location: {}
 			}
 
 		,	required: []
@@ -1374,26 +1372,26 @@ window.Aircheck.app = {
 
 		,	validate: function( attrs, options ){
 
-				this.errors = [];
+				// this.errors = [];
 
-				misc.validateEmptyFields( this.required, attrs, this.errors );
+				// misc.validateEmptyFields( this.required, attrs, this.errors );
 
-				if( this.errors.length > 0 ){
+				// if( this.errors.length > 0 ){
 
-					return 'fieldsRequired';
-				}
+				// 	return 'fieldsRequired';
+				// }
 
-				if( this.get( 'email' ) != '' && misc.isEmail( this.get( 'email' ) ) == false )
-					return 'invalidEmail';
+				// if( this.get( 'email' ) != '' && misc.isEmail( this.get( 'email' ) ) == false )
+				// 	return 'invalidEmail';
 
 
 			}
 
 		,	onInvalid: function( model, error ){
 
-				var _this = this;
+				// var _this = this;
 
-				return alert( _this.lang[error] );
+				// return alert( _this.lang[error] );
 
 			}
 
@@ -1610,7 +1608,8 @@ window.Aircheck.app = {
 
  		,	events: {
  				'click #report-button': 'showPollutionLayers',
- 				'click #symptoms-button': 'showSymptomsLayers'
+ 				'click #symptoms-button': 'showSymptomsLayers',
+ 				'click .report-air-button': 'save'
  			}
 
  		,	model: new app.models.report
@@ -1622,6 +1621,7 @@ window.Aircheck.app = {
 	 			_.bindAll(
 
 	 				this,
+	 				'save',
 	 				'showPollutionLayers',
 	 				'showSymptomsLayers'
 	 			);
@@ -1648,6 +1648,33 @@ window.Aircheck.app = {
  				submenu.html(layers);
  			}
 
+
+ 		,	save: function(e){
+
+ 				e.preventDefault();
+
+ 				// Get the type
+ 				var _this = this
+ 				,	type = $(e.currentTarget).data('type')
+ 				,	subtype = $(e.currentTarget).data('subtype')
+ 				,	user = localStorage.getItem('_id');
+
+ 				this.model.set({ type: type, subtype: subtype, user: user });
+
+ 				var location = new app.models.location();
+ 				location.get('callbacks').setPosition = function(position){
+
+ 					_this.model.set('location', {
+ 						latitude: position.coords.latitude,
+ 						longitude: position.coords.longitude
+ 					});
+
+ 					_this.model.save();
+ 				}
+
+ 				location.getGeoposition();
+ 			}
+
  	});
 
 
@@ -1672,7 +1699,8 @@ window.Aircheck.app = {
 
  		,	events: {
 
- 				'click #register-profile-button': 'register'
+ 				'click #register-profile-button': 'register',
+ 				'click #logout-button': 'logout'
  			}
 
 
@@ -1688,6 +1716,7 @@ window.Aircheck.app = {
 
 	 				this,
 	 				'renderRegisterForm',
+	 				'renderLogout',
 	 				'onSaveSuccess'
 	 			);
  			}
@@ -1706,6 +1735,28 @@ window.Aircheck.app = {
 
  			}
 
+ 			/**
+ 			* Shows the logout page
+ 			*
+ 			*/
+ 		,	renderLogout: function(){
+
+ 				var _this = this;	
+
+ 				var html = new EJS({ url: templatePath + 'user/logout.ejs'}).render({});
+ 				content.html(html);
+
+ 			}
+
+ 		,	logout: function(e){
+
+ 				e.preventDefault();
+
+ 				localStorage.removeItem('_id');
+
+ 				app.routers.user.navigate('user/register', {trigger: true});
+ 			}
+
  		,	register: function(e){
  				e.preventDefault();
 
@@ -1714,8 +1765,6 @@ window.Aircheck.app = {
  				var data = helper.formToJson( this.registerForm );
  				
  				this.model.set( data );
-
- 				//this.model.isValid();
 
  				this.model.save(this.model.attributes, {
  					success: _this.onSaveSuccess,
@@ -1808,17 +1857,42 @@ window.Aircheck.app = {
             *
             */
             routes: {
-                "user/register": "renderRegisterForm"
+                "user/register": "renderRegisterForm",
+                "user/logout": "renderLogout"
             }
 
         ,   initialize: function(){
 
             }
 
+        ,   before: {
+                'user/register': function(route){
+                    if( localStorage.getItem('_id') != null ) {
+                        this.navigate('user/logout', {trigger: true});
+                        return false;
+                    }
+                },
+
+                'user/logout': function(route){
+                    if( ! localStorage.getItem('_id') ) {
+                        this.navigate('user/register', {trigger: true});
+                        return false;
+                    }
+                }
+
+            }
+
         ,   renderRegisterForm: function(){
+
                 app.views.layout.hideMenu();
                 app.views.layout.hideReportMenu();
                 app.views.user.renderRegisterForm();
+            }
+
+        ,   renderLogout: function(){
+                app.views.layout.hideMenu();
+                app.views.layout.hideReportMenu();
+                app.views.user.renderLogout();
             }
 
     });
@@ -1851,6 +1925,14 @@ window.Aircheck.app = {
             }
 
         ,   initialize: function(){
+            }
+
+        ,   before: function(){
+
+                if( ! localStorage.getItem('_id')){
+                    app.routers.user.navigate('user/register', {trigger: true});
+                    return false;
+                }
             }
 
         ,   renderMap: function(){

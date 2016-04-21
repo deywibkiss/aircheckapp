@@ -4,8 +4,9 @@
 */
 
 // Static
-var apiURL = 'http://localhost:1337/';
+var apiURL = 'http://aircheck.cloudapp.net:8080/';
 var templatePath = 'js/templates/';
+var imagePath = 'img/';
 var content = $('#aircheck-main-content');
 var submenu = $('#aircheck-report-submenu');
 
@@ -985,78 +986,6 @@ window.Aircheck.app = {
  	app.helpers.main.initialize();
  	
  })( jQuery, this, this.document, window.Aircheck.app, EJS, undefined );
-( function( $, window, document, app ){
-
-	'use-strict';
-
- 	app.collections.symptoms = Backbone.Collection.extend({
-
- 			urlRoot: apiURL + "symptoms"
-
- 		,	url: apiURL+ "symptoms"
-
- 		,	model: app.models.symptom
-
- 		,	filters: []
-
- 		,	initialize: function( models ){
-
- 				// Bind collection events
-	 			this.on( 'sync', function( collection, response ){
-
-	 				if ( collection instanceof Backbone.Collection ){
-
-		 				var models = [];
-
-	                    $.each( response.creditos, function( key, value ){
-
-	                        var model = new credito( value );
-
-	                        models.push( model );
-	                    });
-
-	                    collection.reset( models );
-	                    collection.customer = response.customer;
-	                    window.CreditoView.customer = new customer(response.customer);
-	                    
-	                    window.CreditoView.renderList( collection );
-	 				}
-
-                });
-
-                this.on( 'modelchanged', function( collection ){
-
-                	window.CreditosView.renderList( collection );
-                });
-
- 			}
-
-
- 		,	validate: function(){
-
- 				if( this.length <= 0 )
- 					return false;
-
-
- 				return true;
- 			}
-
-
- 		,	filterState: function( state ){
-
- 				var filtered = _.filter( this.models, function( model ){
-
- 					if( model.get( 'estado_credito_id' ) == state )
- 						return model;
- 				});
-
- 				return filtered;
- 			}
-
- 	});
-
-
- })(jQuery, this, this.document, window.Aircheck.app, undefined);
 ( function($, window, document, app ){
 	
 
@@ -1214,8 +1143,7 @@ window.Aircheck.app = {
 				name: '',
 				age: 18,
 				email: '',
-				picture: 'users/default.jpg',
-				symptoms: new app.collections.symptoms,
+				symptoms: [],
 				location: new app.models.location
 			}
 
@@ -1283,7 +1211,7 @@ window.Aircheck.app = {
 		,	setLocation: function(position){
 
 				// Set position in json format
-				this.get('location').set('center', {lat: position.coords.latitude, lng: position.coords.longitude});
+				this.set('location', {latitude: position.coords.latitude, longitude: position.coords.longitude});
 			}
 
 	});
@@ -1399,6 +1327,115 @@ window.Aircheck.app = {
 	});
 
 })(jQuery, this, this.document, window.Aircheck.app, undefined);
+( function( $, window, document, app ){
+
+	'use-strict';
+
+ 	app.collections.pollutions = Backbone.Collection.extend({
+
+ 			urlRoot: apiURL + "report/pollution"
+
+ 		,	url: apiURL+ "report/pollution"
+
+ 		,	model: app.models.report
+
+ 		,	filters: []
+
+ 		,	initialize: function( models ){
+
+ 			}
+
+
+ 		,	validate: function(){
+
+ 				if( this.length <= 0 )
+ 					return false;
+ 				
+ 				return true;
+ 			}
+
+ 	});
+
+
+ })(jQuery, this, this.document, window.Aircheck.app, undefined);
+( function( $, window, document, app ){
+
+	'use-strict';
+
+ 	app.collections.reports = Backbone.Collection.extend({
+
+ 			urlRoot: apiURL + "report"
+
+ 		,	url: apiURL+ "report"
+
+ 		,	model: app.models.report
+
+ 		,	filters: []
+
+ 		,	initialize: function( models ){
+
+ 				// Bind collection events
+	 			this.on( 'sync', function( collection, response ){
+
+	 				console.log(collection);
+	 				console.log(response);
+
+                });
+
+ 			}
+
+
+ 		,	validate: function(){
+
+ 				if( this.length <= 0 )
+ 					return false;
+
+ 				return true;
+ 			}
+
+ 	});
+
+
+ })(jQuery, this, this.document, window.Aircheck.app, undefined);
+( function( $, window, document, app ){
+
+	'use-strict';
+
+ 	app.collections.symptoms = Backbone.Collection.extend({
+
+ 			urlRoot: apiURL + "report/symptom"
+
+ 		,	url: apiURL+ "report/symptom"
+
+ 		,	model: app.models.report
+
+ 		,	filters: []
+
+ 		,	initialize: function( models ){
+
+ 				// Bind collection events
+	 			this.on( 'sync', function( collection, response ){
+
+	 				console.log(collection);
+	 				console.log(response);
+
+                });
+
+ 			}
+
+
+ 		,	validate: function(){
+
+ 				if( this.length <= 0 )
+ 					return false;
+ 				
+ 				return true;
+ 			}
+
+ 	});
+
+
+ })(jQuery, this, this.document, window.Aircheck.app, undefined);
 /*
  |--------------------------------------------------------------------------
  | Layout View
@@ -1524,7 +1561,15 @@ window.Aircheck.app = {
 
  		,	model: new app.models.location
 
+ 		,	pollutions: new app.collections.pollutions
+
+ 		,	symptoms: new app.collections.symptoms
+
  		,	map: null
+
+ 		,	bounds: new google.maps.LatLngBounds()
+
+ 		,	markers: []
 
  		,	canvas: $('#map-canvas')[0]
 
@@ -1535,11 +1580,24 @@ window.Aircheck.app = {
 	 			_.bindAll(
 
 	 				this,
-	 				'render'
+	 				'render',
+	 				'renderPollutionMap',
+	 				'renderSymptomsMap',
+	 				'setMarkers',
+	 				'boundListener'
 	 			);
 
 				this.model.on("change:center", this.render, this);
  				this.model.get('callbacks').click = this.click;
+
+ 				this.boundListener();
+
+
+ 				// Pollutions collection
+	 			this.pollutions.on( 'sync', this.renderPollutionMap);
+
+ 				// Symptoms collection
+	 			this.symptoms.on( 'sync', this.renderSymptomsMap);
  			}
 
 
@@ -1570,9 +1628,72 @@ window.Aircheck.app = {
 
  			}
 
- 		,	click: function(e){
 
- 			}
+ 		,	renderPollutionMap: function( collection, response ){
+
+ 				var _this = this;
+
+ 				_this.map = null;
+
+ 				this.setCanvas( function(){
+	 				
+	 				// Init map canvas
+	 				_this.canvas = $('#map-canvas')[0];
+
+					_this.map = new google.maps.Map( _this.canvas, {
+						zoom: 5,
+						center: _this.model.get('center')
+					});
+
+					//_this.boundListener();
+					_this.setMarkers( _this.pollutions );
+
+
+ 				});
+
+
+            }
+
+		,	renderSymptomsMap: function( collection, response ){
+
+				console.log(collection);
+				console.log(response);
+
+           }
+
+
+        ,	setMarkers: function( collection ){
+
+        		var _this = this;
+
+        		collection.each(function(report, index ){
+
+        			var position = new google.maps.LatLng(
+        				Number(report.get('location').latitude),
+        				Number(report.get('location').longitude)
+        			);
+
+        			var image = {
+        			    url: imagePath + 'svgs/' + report.get('subtype') + '.svg',
+        			    size: new google.maps.Size(20, 32)
+        			};
+
+        			console.log(image);
+
+        			_this.bounds.extend(position);
+
+	        		var marker = new google.maps.Marker({
+	        			position: position,
+	        			map: _this.map,
+	        			icon: image
+	        		});
+
+	        		_this.markers.push( marker );
+
+	        		_this.map.fitBounds(_this.bounds);
+        		});
+
+        	}
 
 
  		,	showMapLayers: function(e){
@@ -1583,6 +1704,17 @@ window.Aircheck.app = {
  				var layers = new EJS({url: templatePath + 'map/layers.ejs'}).render();
 
  				submenu.html(layers);
+ 			}
+
+ 		,	boundListener: function(){
+
+ 				var _this = this;
+
+ 				if( _this.map )
+	 				var boundListener = google.maps.event.addListener((_this.map), 'bounds_changed', function(event) {
+				        this.setZoom(14);
+				        google.maps.event.removeListener(_this.boundListener);
+				    });
  			}
 
  	});
@@ -1767,8 +1899,6 @@ window.Aircheck.app = {
  				
  				this.model.set( data );
 
- 				//this.model.isValid();
-
  				this.model.save(this.model.attributes, {
  					success: _this.onSaveSuccess,
  					error: _this.onSaveError
@@ -1924,7 +2054,9 @@ window.Aircheck.app = {
             *
             */
             routes: {
-                "map": "renderMap"
+                "map": "renderMap",
+                "map/pollution": "renderMapPollution",
+                "map/symptoms": "renderMapSymptoms",
             }
 
         ,   initialize: function(){
@@ -1946,6 +2078,28 @@ window.Aircheck.app = {
                 app.views.map.setCanvas( function(){
                     app.views.map.model.get('callbacks').setPosition = app.views.map.model.setPosition;
                     app.views.map.model.getGeoposition();
+                });
+            }
+
+
+        ,   renderMapPollution: function(){
+
+                app.views.layout.hideMenu();
+                app.views.layout.hideReportMenu();
+
+                app.views.map.pollutions.fetch({
+                    error: function(){ alert( 'error!' ); }
+                });
+            }
+
+
+        ,   renderMapSymptoms: function(){
+
+                app.views.layout.hideMenu();
+                app.views.layout.hideReportMenu();
+
+                app.views.map.symptoms.fetch({
+                    error: function(){ alert( 'error!' ); }
                 });
             }
 

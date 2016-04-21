@@ -2,25 +2,17 @@
 
 	'use-strict';
 
- 	app.collections.symptoms = Backbone.Collection.extend({
+ 	app.collections.pollutions = Backbone.Collection.extend({
 
- 			urlRoot: apiURL + "report/symptom"
+ 			urlRoot: apiURL + "report/pollution"
 
- 		,	url: apiURL+ "report/symptom"
+ 		,	url: apiURL+ "report/pollution"
 
  		,	model: app.models.report
 
  		,	filters: []
 
  		,	initialize: function( models ){
-
- 				// Bind collection events
-	 			this.on( 'sync', function( collection, response ){
-
-	 				console.log(collection);
-	 				console.log(response);
-
-                });
 
  			}
 

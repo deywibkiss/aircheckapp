@@ -13,8 +13,7 @@
 				name: '',
 				age: 18,
 				email: '',
-				picture: 'users/default.jpg',
-				symptoms: new app.collections.symptoms,
+				symptoms: [],
 				location: new app.models.location
 			}
 
@@ -82,7 +81,7 @@
 		,	setLocation: function(position){
 
 				// Set position in json format
-				this.get('location').set('center', {lat: position.coords.latitude, lng: position.coords.longitude});
+				this.set('location', {latitude: position.coords.latitude, longitude: position.coords.longitude});
 			}
 
 	});

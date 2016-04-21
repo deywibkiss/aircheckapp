@@ -2,11 +2,11 @@
 
 	'use-strict';
 
- 	app.collections.symptoms = Backbone.Collection.extend({
+ 	app.collections.reports = Backbone.Collection.extend({
 
- 			urlRoot: apiURL + "report/symptom"
+ 			urlRoot: apiURL + "report"
 
- 		,	url: apiURL+ "report/symptom"
+ 		,	url: apiURL+ "report"
 
  		,	model: app.models.report
 
@@ -29,7 +29,7 @@
 
  				if( this.length <= 0 )
  					return false;
- 				
+
  				return true;
  			}
 

@@ -17,7 +17,9 @@
             *
             */
             routes: {
-                "map": "renderMap"
+                "map": "renderMap",
+                "map/pollution": "renderMapPollution",
+                "map/symptoms": "renderMapSymptoms",
             }
 
         ,   initialize: function(){
@@ -39,6 +41,28 @@
                 app.views.map.setCanvas( function(){
                     app.views.map.model.get('callbacks').setPosition = app.views.map.model.setPosition;
                     app.views.map.model.getGeoposition();
+                });
+            }
+
+
+        ,   renderMapPollution: function(){
+
+                app.views.layout.hideMenu();
+                app.views.layout.hideReportMenu();
+
+                app.views.map.pollutions.fetch({
+                    error: function(){ alert( 'error!' ); }
+                });
+            }
+
+
+        ,   renderMapSymptoms: function(){
+
+                app.views.layout.hideMenu();
+                app.views.layout.hideReportMenu();
+
+                app.views.map.symptoms.fetch({
+                    error: function(){ alert( 'error!' ); }
                 });
             }
 

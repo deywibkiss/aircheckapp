@@ -60,8 +60,6 @@ gulp.task('js-backbone-app', function(){
         // Helpers
         pAppOrigin + 'helpers/*.js',
 
-        // Collections
-        pAppOrigin + 'collections/*.js',
 
         // Models
         pAppOrigin + 'models/symptom.js',
@@ -70,6 +68,9 @@ gulp.task('js-backbone-app', function(){
         pAppOrigin + 'models/report-type.js',
         pAppOrigin + 'models/report.js',
 
+        // Collections
+        pAppOrigin + 'collections/*.js',
+        
         // Views
         pAppOrigin + 'views/*.js',
 

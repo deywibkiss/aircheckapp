@@ -82,8 +82,6 @@
  				
  				this.model.set( data );
 
- 				//this.model.isValid();
-
  				this.model.save(this.model.attributes, {
  					success: _this.onSaveSuccess,
  					error: _this.onSaveError
