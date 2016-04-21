@@ -4,23 +4,15 @@
 
  	app.collections.symptoms = Backbone.Collection.extend({
 
- 			urlRoot: apiURL + "report/symptom"
+ 			urlRoot: apiURL + "report/symptoms"
 
- 		,	url: apiURL+ "report/symptom"
+ 		,	url: apiURL+ "report/symptoms"
 
  		,	model: app.models.report
 
  		,	filters: []
 
  		,	initialize: function( models ){
-
- 				// Bind collection events
-	 			this.on( 'sync', function( collection, response ){
-
-	 				console.log(collection);
-	 				console.log(response);
-
-                });
 
  			}
 

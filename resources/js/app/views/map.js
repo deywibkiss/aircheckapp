@@ -114,8 +114,25 @@
 
 		,	renderSymptomsMap: function( collection, response ){
 
-				console.log(collection);
-				console.log(response);
+				var _this = this;
+
+ 				_this.map = null;
+
+ 				this.setCanvas( function(){
+	 				
+	 				// Init map canvas
+	 				_this.canvas = $('#map-canvas')[0];
+
+					_this.map = new google.maps.Map( _this.canvas, {
+						zoom: 5,
+						center: _this.model.get('center')
+					});
+
+					//_this.boundListener();
+					_this.setMarkers( _this.symptoms );
+
+
+ 				});
 
            }
 
@@ -131,12 +148,8 @@
         				Number(report.get('location').longitude)
         			);
 
-        			var image = {
-        			    url: imagePath + 'svgs/' + report.get('subtype') + '.svg',
-        			    size: new google.maps.Size(20, 32)
-        			};
-
-        			console.log(image);
+        			var image = new google.maps.MarkerImage(imagePath + 'svgs/' + report.get('subtype') + '.svg',
+    				null, null, null, new google.maps.Size(100,128));
 
         			_this.bounds.extend(position);
 
