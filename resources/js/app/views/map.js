@@ -82,7 +82,8 @@
 					zoom: 17
 				});
 
-				this.model.setMarker( this.map );
+				this.setMarkers( this.pollutions );
+				this.setMarkers( this.symptoms );
 
  			}
 
