@@ -9,6 +9,7 @@ var templatePath = 'js/templates/';
 var imagePath = 'img/';
 var content = $('#aircheck-main-content');
 var submenu = $('#aircheck-report-submenu');
+var sublayers = $('#aircheck-sublayers');
 
 
 window.Aircheck = {};

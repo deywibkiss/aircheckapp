@@ -97,7 +97,9 @@ gulp.task('css-less-app', function() {
         .pipe(sourcemaps.init())
         .pipe(less({
           paths: [ path.join(__dirname, 'less', 'includes') ],
-          plugins: [cleancss, autoprefix]
+          plugins: [cleancss, autoprefix],
+          strictMath: true,
+          strictUnits: true
         }))
         .pipe(sourcemaps.write())
         .pipe(gulp.dest(pStylesDestination)).on('error', gutil.log)

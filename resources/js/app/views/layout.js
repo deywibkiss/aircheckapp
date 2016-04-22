@@ -49,6 +49,9 @@
  		,	toggleReportMenu: function(e){
 
  				$('#aircheck-report-menu').toggleClass('active');
+
+ 				if( sublayers.hasClass('active') )
+ 					sublayers.removeClass('active');
  			}
 
  		,	hideReportMenu: function(){
