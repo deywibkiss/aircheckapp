@@ -29,3 +29,24 @@
 	}
 
 }
+
+.back-btn {
+	padding: 12px 12px;
+	position: absolute; 
+	top: 40px;
+	right: 15px;
+	width: 60px;
+	height: 60px;
+	margin: 15px auto;
+	background-color: @white;
+	border-radius: 100%;
+	transform: rotate(-90deg);
+
+	&.btn-default {
+		border: 3px solid @gray;
+		&:hover, &:active, &:focus {
+			border: 2px solid @black;
+			box-shadow: inset 0 0 2px 1px @black;
+		}
+	}
+}
