@@ -15,7 +15,8 @@
 
  		,	events: {
  				'click #map-button': 'showMapLayers',
- 				'click #symptoms-subitems-button': 'showSymptomsLayers'
+ 				'click #symptoms-subitems-button': 'showSymptomsLayers',
+ 				'click #locate-button': 'clickLocateButton'
  			}
 
  		,	model: new app.models.location
@@ -116,6 +117,12 @@
  				});
 
            }
+
+       ,	clickLocateButton: function(e){
+       			console.log(app.views.user.model.get('location').get('center'));
+				//this.map.setCenter();
+
+ 		}
 
         ,	setMap: function(){
 

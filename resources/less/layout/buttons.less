@@ -30,17 +30,25 @@
 
 }
 
-.back-btn {
+.float-btn {
 	padding: 12px 12px;
 	position: absolute; 
-	top: 40px;
-	right: 15px;
 	width: 60px;
 	height: 60px;
 	margin: 15px auto;
 	background-color: @white;
 	border-radius: 100%;
-	transform: rotate(-90deg);
+
+	&.btn-back{
+		top: 40px;
+		right: 15px;
+		transform: rotate(-90deg);
+	}
+
+	&.btn-pos{
+		top: 110px;
+		right: 15px;
+	}
 
 	&.btn-default {
 		border: 3px solid @gray;

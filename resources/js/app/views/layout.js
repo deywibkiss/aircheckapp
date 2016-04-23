@@ -42,7 +42,6 @@
  				this.setDefaultMenu();
  		}
 
-
  		,	toggleMenu: function( e ){
  				
  				$('#aircheck-menu-aside').toggleClass('active');
