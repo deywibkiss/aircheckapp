@@ -1446,7 +1446,8 @@ window.Aircheck.app = {
 
  		,	events: {
  				'click #toggle-menu-button': 'toggleMenu',
- 				'click #toggle-report-menu-button': 'toggleReportMenu'
+ 				'click #toggle-report-menu-button': 'toggleReportMenu',
+ 				'click #back-button': 'clickBackButton'
  			}
 
 
@@ -1464,7 +1465,13 @@ window.Aircheck.app = {
 
 	 			this.panReportMenu();
 	 			this.swipeHideMenu();
+	 			this.setDefaultMenu();
  			}
+
+ 		,	clickBackButton: function(e){
+ 				window.history.back();
+ 				this.setDefaultMenu();
+ 		}
 
 
  		,	toggleMenu: function( e ){
@@ -1528,6 +1535,12 @@ window.Aircheck.app = {
  				    $('#aircheck-menu-aside').removeClass('active');
  				});
  			}
+ 		, setDefaultMenu: function(){
+ 				var _this = this;	
+
+ 				var html = new EJS({ url: templatePath + 'menu/default.ejs'}).render({});
+ 				submenu.html(html);
+ 		}
 
  	});
 
