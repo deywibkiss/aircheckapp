@@ -76,10 +76,21 @@
  						longitude: position.coords.longitude
  					});
 
- 					_this.model.save();
+ 					_this.model.save(_this.model.attributes,{
+ 						success: _this.onSuccessSave,
+ 						error: _this.onError
+ 					});
  				}
 
  				location.getGeoposition();
+ 			}
+
+ 		,	onSuccessSave: function( model, response, options ){
+
+ 				app.views.layout.hideMenu();
+                app.views.layout.hideReportMenu();
+
+ 				alert('Thank you for your report');
  			}
 
  	});
