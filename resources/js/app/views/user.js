@@ -79,7 +79,7 @@
  				var _this = this;
 
  				var data = helper.formToJson( this.registerForm );
- 				
+
  				this.model.set( data );
 
  				this.model.save(this.model.attributes, {
