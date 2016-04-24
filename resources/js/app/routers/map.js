@@ -20,7 +20,9 @@
                 "map": "renderMap",
                 "map/pollution": "renderMapPollution",
                 "map/symptoms": "renderMapSymptoms",
-                "map/heatmap": "renderHeatmapPollution"
+                "map/heatmap": "renderHeatmapPollution",
+                "map/aerosol": "renderMapAerosol",
+                "map/co2": "renderCOMap"
             }
 
         ,   initialize: function(){
@@ -99,6 +101,42 @@
                 app.views.heatmap.pollutions.fetch({
                     error: function(){ alert( 'error!' ); }
                 });
+            }
+
+        ,   renderMapAerosol: function(){
+
+                app.views.map.setCanvas( function(){
+
+                    app.views.map.canvas = $('#map-canvas')[0];
+
+                    // Init map canvas
+                    app.views.map.map = new google.maps.Map( app.views.map.canvas, {
+                        zoom: 3,
+                        center: { lat: 28.895074, lng: 91.459554}
+                    });
+
+                    // Pollutions collection
+                    app.views.map.setLayer('MODIS_Terra_Aerosol');
+                });
+
+            }
+
+        ,   renderCOMap: function(){
+
+                app.views.map.setCanvas( function(){
+
+                    app.views.map.canvas = $('#map-canvas')[0];
+
+                    // Init map canvas
+                    app.views.map.map = new google.maps.Map( app.views.map.canvas, {
+                        zoom: 3,
+                        center: { lat: 28.895074, lng: 91.459554}
+                    });
+
+                    // Pollutions collection
+                    app.views.map.setLayer('MLS_CO_215hPa_Day');
+                });
+
             }
 
     });
