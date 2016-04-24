@@ -1931,9 +1931,22 @@ window.Aircheck.app = {
  			el: $( 'body' )
 
  		,	events: {
+ 				'click #notification-icon': 'show',
+ 				'click .notification': 'hide'
+ 			}
+
+
+ 		,	messages: {
+ 				"fire": "Many fires occur in the area, avoid transit through this place",
+ 				"traffic": "Much traffic congestion, can cause inflammation of the airways",
+ 				"dust": "Intermediate risk. Do not inhale gases released. Use respiratory protection. Maintain a safe distance."
  			}
 
  		,	model: new app.models.notification
+
+ 		,	count: 0
+
+ 		,	notifications: []
 
  		,	initialize: function(){
 
@@ -1951,30 +1964,79 @@ window.Aircheck.app = {
  			* Shows the login page
  			*
  			*/
- 		,	renderSymptom: function(){
+ 		,	renderSymptom: function(message){
 
  				var _this = this;	
 
- 				var html = new EJS({ url: templatePath + 'notifications/symptoms.ejs'}).render({});
+ 				var html = new EJS({ url: templatePath + 'notifications/symptoms.ejs'}).render({
+ 					message: message
+ 				});
  				
  				return html;
  			}
 
- 		,	showNotification: function(e){
+ 		,	showNotification: function(message){
 
- 				e.preventDefault();
 
- 				var notification = this.renderSymptom();
+ 				var notification = this.renderSymptom(message);
 
  				setTimeout( function(){
  					notifications.append(notification);
  				}, 1000);
  			}
 
+ 		,	validateAndShow: function( data ){
+
+ 				var _this = this;
+
+ 				_.each( data, function(item, index){
+ 					if(item.subtype){
+
+ 						if(item.count > 8 ){
+ 							_this.count++;
+ 							_this.notifications.push(_this.messages[item.subtype]);
+
+ 						}
+
+ 					}
+ 				});
+
+ 				if(_this.count > 0)
+ 					$('.notification-count').text(_this.count).show();
+
+
+ 			}
+
+ 		,	show: function(){
+ 				var _this = this;
+
+ 				_.each(this.notifications, function(message, index){
+ 					_this.showNotification( message );
+ 				});
+
+ 				_this.count = 0;
+ 				$('.notification-count').text(0).hide();
+ 			}
+
+ 		,	hide: function(){
+ 				notifications.html('');
+ 			}
+
+
+ 		,   get: function(){
+
+ 				var _this = this;
+
+                $.get(apiURL + 'stadistic', function(response){
+
+                    _this.validateAndShow(response);
+                });
+            }
+
  	});
 
 
- 	app.views.user = new NotificationView();
+ 	app.views.notification = new NotificationView();
 
 
  })(jQuery, this, this.document, window.Aircheck.app, window.Aircheck.app.helpers.main, undefined);
@@ -2445,6 +2507,9 @@ window.Aircheck.app = {
                     });
 
                 });
+
+                // Call notifications
+                app.views.notification.get();
             }
 
 
