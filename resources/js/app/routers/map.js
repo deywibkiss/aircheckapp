@@ -68,8 +68,10 @@
 
         ,   renderMapPollution: function(){
 
+                console.log('here');
+
                 // Pollutions collection
-                app.views.map.pollutions.on( 'sync', app.views.map.renderPollutionMap);
+                //app.views.map.pollutions.once( 'sync', app.views.map.renderPollutionMap);
 
                 app.views.layout.hideMenu();
                 app.views.layout.hideReportMenu();
@@ -83,10 +85,11 @@
         ,   renderMapSymptoms: function(){
 
                 // Symptoms collection
-                app.views.map.symptoms.on( 'sync', app.views.map.renderSymptomsMap);
+                //app.views.map.symptoms.once( 'sync', app.views.map.renderSymptomsMap);
 
                 app.views.layout.hideMenu();
                 app.views.layout.hideReportMenu();
+                sublayers.removeClass('active');
 
                 app.views.map.symptoms.fetch({
                     //error: function(){ alert( 'error!' ); }
@@ -96,7 +99,7 @@
         ,   renderHeatmapPollution: function(){
 
                 // Pollutions collection
-                //app.views.heatmap.pollutions.on( 'sync', app.views.heatmap.renderPollutionHeatmap);
+                app.views.heatmap.pollutions.once( 'sync', app.views.heatmap.renderPollutionHeatmap);
 
                 app.views.layout.hideMenu();
                 app.views.layout.hideReportMenu();
@@ -150,7 +153,8 @@
 
     Backbone.history.start({
         root: '/',
-        pushState: false
+        pushState: false,
+        silent: false
     });
 
 

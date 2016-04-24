@@ -62,10 +62,13 @@
 
  		,	setCanvas: function( callback ){
 
- 				if( $('#map-canvas').length <= 0 ){
+ 				$('#map-canvas').remove();
+ 				$('#heatmap-canvas').remove();
+
+ 				// if( $('#map-canvas').length <= 0 ){
 	 				var html = new EJS({ url: templatePath + 'map/default.ejs'}).render({});
 	 				content.html(html);
- 				}
+ 				//}
 
  				if( typeof callback == 'function')
  					callback.call();
@@ -124,28 +127,14 @@
         		var _this = this;
 
  				// Init map canvas
- 				if( _this.map == null ){
+ 				//if( _this.map == null ){
 	 				_this.canvas = $('#map-canvas')[0];
 
 					_this.map = new google.maps.Map( _this.canvas, {
 						zoom: 5,
 						center: _this.model.get('center')
 					});
-
-					/*
-					**
-					MODIS_Terra_Cloud_Top_Temp_Day		//Cloudy
-					MODIS_Terra_Aerosol		//Aereosol
-					MLS_CO_215hPa_Day	//Dioxido de Carbono
-					MODIS_Terra_Cloud_Top_Temp_Day //Temperatura
-					MLS_HNO3_46hPa_Day //Acido Nitrico
-					AIRS_Precipitation_Day
-					AMSR2_Wind_Speed_Day //Velocidad del viento
-
-					*/
-
-					//_this.setLayer( "AMSR2_Wind_Speed_Day" );
- 				}
+ 				//}
         	}
 
     	,	setLayer: function(product){
