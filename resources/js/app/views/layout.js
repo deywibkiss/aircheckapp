@@ -64,6 +64,10 @@
  				$('#aircheck-report-menu').removeClass('active');
  			}
 
+ 		,	showReportMenu: function(){
+ 				$('#aircheck-report-menu').addClass('active');
+ 			}
+
  		,	panReportMenu: function(){
  				
  				var reportButton = document.getElementById('aircheck-report-menu');

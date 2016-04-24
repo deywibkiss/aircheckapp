@@ -69,9 +69,9 @@
                             <i class="air-icon-radar"></i>
                         </button>
 
-                        <!-- <button type="button" id="show-notification-button" class="float-btn btn-default btn-notif">
-                            <i class="air-icon-radar"></i>
-                        </button> -->
+                        <button type="button" id="camera-report-button" class="float-btn btn-default btn-camera">
+                            <i class="air-icon-camera"></i>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -106,13 +106,14 @@
 
         <!-- App -->
         <script src="js/aircheck-app.js"></script>
+        <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript">
-            socket = io(apiURL);
+            // socket = io(apiURL);
 
-            socket.on('report get', function(data){
-                console.log('socket');
-                console.log(data);
-            });
+            // socket.on('report get', function(data){
+            //     console.log('socket');
+            //     console.log(data);
+            // });
         </script>
     </body>
 </html>

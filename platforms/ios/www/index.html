@@ -1,7 +1,14 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+        <meta name="msapplication-tap-highlight" content="no" />
         <title>Aircheck</title>
+
+
+        <!-- Styles -->
+        <link rel="stylesheet" href="css/aircheck.css"/>
 
         <!-- Libs -->
         <script src="js/aircheck-libs.js"></script>
@@ -12,16 +19,108 @@
 
     <body>
         
-        <a href="#map">Mapa</a>
+        <!-- Menu -->
+        <nav id="aircheck-menu">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xs-3 col-sm-1">
+                        <button type="button" class="menu-button" id="toggle-menu-button">
+                            <i class="air-icon-hamburger"></i>
+                        </button>
+                    </div>
+                    <div class="col-xs-6 col-sm-10" id="page-title">
+                        MAP
+                    </div>
+                    <div class="col-xs-3 col-sm-1">
+                        <button type="button" id="notification-icon" class="menu-button">
+                            <i class="air-icon-bell"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-        <div id="aircheck-main-content">
-            
+        </nav>
+        
+        <!-- Menu aside -->
+        <nav id="aircheck-menu-aside">
+            <ul>
+                <li>
+                    <a href="#user/register">
+                        <i class="air-icon-config"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- SubLayers -->
+        <nav id="aircheck-sublayers" class="container-fluid"></nav>
+        
+        <div id="content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div id="aircheck-main-content">
+                        </div>
+                        <button type="button" id="back-button" class="float-btn btn-default btn-back">
+                            <i class="air-icon-arrow-top"></i>
+                        </button>
+                        <button type="button" id="locate-button" class="float-btn btn-default btn-pos">
+                            <i class="air-icon-radar"></i>
+                        </button>
+
+                        <button type="button" id="camera-report-button" class="float-btn btn-default btn-camera">
+                            <i class="air-icon-camera"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <br/>
-        <div id="map-canvas" style="position: absolute; top: 50px; left: 0; width: 100%; height: 100%;"></div>
+        <!-- Report menu -->
+        <nav id="aircheck-report-menu">
+            <button type="button" id="toggle-report-menu-button">
+                <i class="air-icon-arrow-top"></i>
+            </button>
+
+            <div id="aircheck-report-submenu">
+                
+            </div>
+        </nav>
+
+        <!-- Notifications -->
+        <nav id="notifications">
+        </nav>
+
+        <!-- Loading -->
+        <div id="loading">
+            <div id="bowlG">
+                <div id="bowl_ringG">
+                    <div class="ball_holderG">
+                        <div class="ballG">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- App -->
         <script src="js/aircheck-app.js"></script>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript">
+            // socket = io(apiURL);
+
+            // socket.on('report get', function(data){
+            //     console.log('socket');
+            //     console.log(data);
+            // });
+        </script>
+        <script type="text/javascript">
+            document.addEventListener("deviceready", onDeviceReady, false);
+function onDeviceReady() {
+ 
+    
+}
+        </script>
     </body>
 </html>

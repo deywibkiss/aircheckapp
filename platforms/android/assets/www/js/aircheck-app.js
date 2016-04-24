@@ -1309,6 +1309,7 @@ window.Aircheck.app = {
 				subtype: '',
 				level: 1,
 				user: null,
+				'picture': null,
 				location: {}
 			}
 
@@ -1556,6 +1557,10 @@ window.Aircheck.app = {
  				$('#aircheck-report-menu').removeClass('active');
  			}
 
+ 		,	showReportMenu: function(){
+ 				$('#aircheck-report-menu').addClass('active');
+ 			}
+
  		,	panReportMenu: function(){
  				
  				var reportButton = document.getElementById('aircheck-report-menu');
@@ -1754,6 +1759,55 @@ window.Aircheck.app = {
 						zoom: 5,
 						center: _this.model.get('center')
 					});
+
+					/*
+					**
+					MODIS_Terra_Cloud_Top_Temp_Day		//Cloudy
+					MODIS_Terra_Aerosol		//Aereosol
+					MLS_CO_215hPa_Day	//Dioxido de Carbono
+					MODIS_Terra_Cloud_Top_Temp_Day //Temperatura
+					MLS_HNO3_46hPa_Day //Acido Nitrico
+					AIRS_Precipitation_Day
+					AMSR2_Wind_Speed_Day //Velocidad del viento
+
+					*/
+
+					//_this.setLayer( "AMSR2_Wind_Speed_Day" );
+ 				}
+        	}
+
+    	,	setLayer: function(product){
+
+        		var _this = this;
+
+ 				// Init map canvas
+ 				if( _this.map != null ){
+	 				// var product = "MODIS_Terra_Cloud_Top_Temp_Day";
+
+				    var getTileUrl = function(tile, zoom) {
+
+			    		var hoy = new Date();
+		    			var mes = ("0" + (hoy.getMonth() + 1)).slice(-2)
+
+				        var url = "//map1.vis.earthdata.nasa.gov/wmts-webmerc/" +
+				               product + "/default/" + hoy.getFullYear() + "-"+mes+"-" + hoy.getDate() + "/" +
+				               "GoogleMapsCompatible_Level6/" +
+				                zoom + "/" + tile.y + "/" +
+				                tile.x + ".png";
+
+				        return url;
+				    };
+
+				    var layerOptions = {
+				        alt: product,
+				        getTileUrl: getTileUrl,
+				        name: product,
+				        tileSize: new google.maps.Size(256, 256),
+				        opacity: 0.4
+				    };
+
+				    var imageMapType = new google.maps.ImageMapType(layerOptions);
+				    _this.map.overlayMapTypes.insertAt(0, imageMapType);
  				}
         	}
 
@@ -1945,10 +1999,17 @@ window.Aircheck.app = {
  				'click .show-level-button': 'showLevels',
  				'click .set-level-button': 'setLevel',
  				'click #save-report-button': 'save',
- 				'click #cancel-report-button': 'cancel'
+ 				'click #cancel-report-button': 'cancel',
+ 				'click #camera-report-button': 'camera'
  			}
 
  		,	model: new app.models.report
+
+ 		,	pictureSource: null
+
+ 		,	destinationType: null
+
+ 		,	retries: 0
 
  		,	initialize: function(){
 
@@ -2019,6 +2080,26 @@ window.Aircheck.app = {
  				console.log( this.model.attributes );
  			}
 
+ 		,	camera: function(e){
+
+ 				var _this = this;
+
+ 				_this.pictureSource = navigator.camera.PictureSourceType;
+ 				_this.destinationType = navigator.camera.DestinationType;
+
+ 				navigator.camera.getPicture( function(fileURI){
+ 					_this.fileURI = fileURI;
+ 					_this.showPollutionLayers(e);
+ 					app.views.layout.showReportMenu();
+
+ 				}, function(message){
+ 				    alert(message);
+ 				}, {
+ 					quality: 70,
+ 					destinationType: _this.destinationType.FILE_URI
+ 				});
+ 			}
+
 
  		,	save: function(e){
 
@@ -2034,10 +2115,32 @@ window.Aircheck.app = {
  						longitude: position.coords.longitude
  					});
 
- 					_this.model.save(_this.model.attributes,{
- 						success: _this.onSuccessSave,
- 						error: _this.onError
- 					});
+ 					//alert( 'hello' + _this.fileURI);
+
+ 					if( _this.fileURI ){
+		 				 
+					    var fail = function (error) {
+				            navigator.camera.clearCache();
+				            alert('Ups. Something wrong happens!');
+					    }
+					 
+					    var options = new FileUploadOptions();
+					    options.fileKey = "file";
+					    options.fileName = _this.fileURI.substr(_this.fileURI.lastIndexOf('/') + 1);
+					    options.mimeType = "image/jpeg";
+					    options.params = { model: _this.model.toJSON() }; // if we need to send parameters to the server request
+					    var ft = new FileTransfer();
+					    alert( 'inside ' + _this.fileURI);
+					    ft.upload(_this.fileURI, encodeURI(apiURL + 'report/image'), _this.onSuccessSave, fail, options);
+ 					
+ 					} else {
+
+	 					_this.model.save(_this.model.attributes,{
+	 						success: _this.onSuccessSave,
+	 						error: _this.onError
+	 					});
+ 					}
+
  				}
 
  				location.getGeoposition();

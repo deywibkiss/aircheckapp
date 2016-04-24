@@ -14,6 +14,7 @@
 				subtype: '',
 				level: 1,
 				user: null,
+				'picture': null,
 				location: {}
 			}
 
