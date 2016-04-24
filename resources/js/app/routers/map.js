@@ -54,6 +54,9 @@
                     });
 
                 });
+
+                // Call notifications
+                app.views.notification.get();
             }
 
 

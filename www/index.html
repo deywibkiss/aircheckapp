@@ -34,6 +34,7 @@
                     <div class="col-xs-3 col-sm-1">
                         <button type="button" id="notification-icon" class="menu-button">
                             <i class="air-icon-bell"></i>
+                            <span class="notification-count"></span>
                         </button>
                     </div>
                 </div>
@@ -107,12 +108,12 @@
         <!-- App -->
         <script src="js/aircheck-app.js"></script>
         <script type="text/javascript">
-            socket = io(apiURL);
+            // socket = io(apiURL);
 
-            socket.on('report get', function(data){
-                console.log('socket');
-                console.log(data);
-            });
+            // socket.on('report get', function(data){
+            //     console.log('socket');
+            //     console.log(data);
+            // });
         </script>
     </body>
 </html>
