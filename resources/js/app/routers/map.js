@@ -20,6 +20,7 @@
                 "map": "renderMap",
                 "map/pollution": "renderMapPollution",
                 "map/symptoms": "renderMapSymptoms",
+                "map/heatmap": "renderHeatmapPollution"
             }
 
         ,   initialize: function(){
@@ -83,6 +84,19 @@
                 app.views.layout.hideReportMenu();
 
                 app.views.map.symptoms.fetch({
+                    error: function(){ alert( 'error!' ); }
+                });
+            }
+
+        ,   renderHeatmapPollution: function(){
+
+                // Pollutions collection
+                //app.views.heatmap.pollutions.on( 'sync', app.views.heatmap.renderPollutionHeatmap);
+
+                app.views.layout.hideMenu();
+                app.views.layout.hideReportMenu();
+
+                app.views.heatmap.pollutions.fetch({
                     error: function(){ alert( 'error!' ); }
                 });
             }

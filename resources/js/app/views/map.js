@@ -118,6 +118,7 @@
 
            }
 
+
         ,	setMap: function(){
 
         		var _this = this;
