@@ -1640,7 +1640,10 @@ window.Aircheck.app = {
  		,	events: {
  				'click #map-button': 'showMapLayers',
  				'click #symptoms-subitems-button': 'showSymptomsLayers',
+ 				'click #aerosol-subitems-button': 'aerosolLayer',
+ 				'click #dioxide-subitems-button': 'dioxideLayer',
  				'click #locate-button': 'refreshPosition'
+
  			}
 
  		,	model: new app.models.location
@@ -1767,8 +1770,20 @@ window.Aircheck.app = {
 
 					*/
 
-					_this.setLayer( "AMSR2_Wind_Speed_Day" );
+					//_this.setLayer( "AMSR2_Wind_Speed_Day" );
  				}
+        	}
+
+        ,	aerosolLayer: function(){
+        		var _this = this;
+        		_this.map.setZoom(1);
+        		//_this.setLayer( "MODIS_Terra_Aerosol" );
+        	}
+
+        ,	dioxideLayer: function(){
+        		var _this = this;
+        		_this.map.setZoom(10);
+        		//_this.setLayer( "MLS_CO_215hPa_Day" );
         	}
 
     	,	setLayer: function(product){
