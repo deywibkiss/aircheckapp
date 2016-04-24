@@ -2602,6 +2602,8 @@ window.Aircheck.app = {
                     app.routers.user.navigate('user/register', {trigger: true});
                     return false;
                 }
+
+                sublayers.removeClass('active');
             }
 
         ,   renderMap: function(){
