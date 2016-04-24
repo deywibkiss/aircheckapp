@@ -45,6 +45,8 @@
 	 				'showLevels',
 	 				'setLevel'
 	 			);
+
+	 			socket.on('report get', this.onReport);
  			}
 
 
@@ -181,6 +183,20 @@
 
  				alert('Thank you for your report');
  			}
+
+ 		,	onReport: function(data){
+	 			
+	 			console.log(data);
+
+	 			var report = new app.models.report();
+	 			report.set(data);
+
+	 			if( report.get('type') == 'pollution' )
+	 				app.views.map.pollutions.add(report, { merge: true });
+
+	 			if( report.get('type') == 'symptoms' )
+	 				app.views.map.symptoms.add(report, { merge: true });
+	 		}
 
  	});
 

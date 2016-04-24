@@ -47,16 +47,21 @@
 	 				'setMarkers',
 	 				'removeMarkers',
 	 				'boundListener',
-	 				'centerUser'
+	 				'centerUser',
+	 				'renderMarker'
 	 			);
 
  				this.boundListener();
  
  				// Pollutions collection
 	 			this.pollutions.on( 'sync', this.renderPollutionMap);
+	 			this.pollutions.on( 'add', this.renderMarker);
 
  				// Symptoms collection
 	 			this.symptoms.on( 'sync', this.renderSymptomsMap);
+	 			this.symptoms.on( 'add', this.renderMarker);
+
+
  			}
 
 
@@ -97,9 +102,10 @@
  				this.setCanvas( function(){
 	 				_this.setMap();
 	 				_this.removeMarkers();
-					_this.setMarkers( _this.pollutions );
+					//_this.setMarkers( _this.pollutions );
 					_this.model.get('callbacks').setPosition = _this.centerUser;
 					_this.model.getGeoposition();
+					_this.map.fitBounds(_this.bounds);
  				});
 
 
@@ -109,11 +115,14 @@
 
 				var _this = this;
 
+				console.log( collection );
+
+
  				this.setCanvas( function(){
 	 				// Init map canvas
 	 				_this.setMap();
 	 				_this.removeMarkers();
-					_this.setMarkers( _this.symptoms );
+					//_this.setMarkers( _this.symptoms );
 					_this.model.get('callbacks').setPosition = _this.centerUser;
 					_this.model.getGeoposition();
 
@@ -131,8 +140,8 @@
 	 				_this.canvas = $('#map-canvas')[0];
 
 					_this.map = new google.maps.Map( _this.canvas, {
-						zoom: 5,
-						center: _this.model.get('center')
+						zoom: 15,
+						center: ( _this.model.get('center') != null ) ? _this.model.get('center') : { lat: 4.628929, lng: -74.064470 }
 					});
  				//}
         	}
@@ -267,6 +276,50 @@
  		,	refreshPosition: function(e){
  				this.model.get('callbacks').setPosition = this.centerUser;
  				this.model.getGeoposition();
+ 			}
+
+ 		,	renderMarker: function(report){
+
+ 				var _this = this;
+
+    			var position = new google.maps.LatLng(
+    				Number(report.get('location').latitude),
+    				Number(report.get('location').longitude)
+    			);
+
+    			if( _this.map == null )
+	 				this.setCanvas( function(){
+		 				// Init map canvas
+		 				_this.setMap();
+		 				_this.removeMarkers();
+						//_this.setMarkers( _this.symptoms );
+						_this.model.get('callbacks').setPosition = _this.centerUser;
+						_this.model.getGeoposition();
+
+						_renderMarker();
+
+	 				});
+	 			else
+	 				_renderMarker();
+    				
+
+    			function _renderMarker(){
+
+	    			var image = new google.maps.MarkerImage(imagePath + 'pins/' + report.get('subtype') + '.svg',
+					null, null, null, new google.maps.Size(64,64));
+
+	    			_this.bounds.extend(position);
+
+	        		var marker = new google.maps.Marker({
+	        			position: position,
+	        			map: _this.map,
+	        			icon: image
+	        		});
+
+	        		_this.markers.push( marker );
+    			}
+
+
  			}
 
  	});

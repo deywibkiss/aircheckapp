@@ -4,7 +4,7 @@
 */
 
 // Static
-var apiURL = 'http://aircheck.cloudapp.net:8080/';
+var apiURL = 'http://aircheck.cloudapp.net:8081/';
 var templatePath = 'js/templates/';
 var imagePath = 'img/';
 var content = $('#aircheck-main-content');

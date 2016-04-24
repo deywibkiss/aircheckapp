@@ -4,7 +4,7 @@
 */
 
 // Static
-var apiURL = 'http://aircheck.cloudapp.net:8080/';
+var apiURL = 'http://aircheck.cloudapp.net:8081/';
 var templatePath = 'js/templates/';
 var imagePath = 'img/';
 var content = $('#aircheck-main-content');
@@ -1799,16 +1799,21 @@ window.Aircheck.app = {
 	 				'setMarkers',
 	 				'removeMarkers',
 	 				'boundListener',
-	 				'centerUser'
+	 				'centerUser',
+	 				'renderMarker'
 	 			);
 
  				this.boundListener();
  
  				// Pollutions collection
 	 			this.pollutions.on( 'sync', this.renderPollutionMap);
+	 			this.pollutions.on( 'add', this.renderMarker);
 
  				// Symptoms collection
 	 			this.symptoms.on( 'sync', this.renderSymptomsMap);
+	 			this.symptoms.on( 'add', this.renderMarker);
+
+
  			}
 
 
@@ -1849,9 +1854,10 @@ window.Aircheck.app = {
  				this.setCanvas( function(){
 	 				_this.setMap();
 	 				_this.removeMarkers();
-					_this.setMarkers( _this.pollutions );
+					//_this.setMarkers( _this.pollutions );
 					_this.model.get('callbacks').setPosition = _this.centerUser;
 					_this.model.getGeoposition();
+					_this.map.fitBounds(_this.bounds);
  				});
 
 
@@ -1861,11 +1867,14 @@ window.Aircheck.app = {
 
 				var _this = this;
 
+				console.log( collection );
+
+
  				this.setCanvas( function(){
 	 				// Init map canvas
 	 				_this.setMap();
 	 				_this.removeMarkers();
-					_this.setMarkers( _this.symptoms );
+					//_this.setMarkers( _this.symptoms );
 					_this.model.get('callbacks').setPosition = _this.centerUser;
 					_this.model.getGeoposition();
 
@@ -1883,8 +1892,8 @@ window.Aircheck.app = {
 	 				_this.canvas = $('#map-canvas')[0];
 
 					_this.map = new google.maps.Map( _this.canvas, {
-						zoom: 5,
-						center: _this.model.get('center')
+						zoom: 15,
+						center: ( _this.model.get('center') != null ) ? _this.model.get('center') : { lat: 4.628929, lng: -74.064470 }
 					});
  				//}
         	}
@@ -2019,6 +2028,50 @@ window.Aircheck.app = {
  		,	refreshPosition: function(e){
  				this.model.get('callbacks').setPosition = this.centerUser;
  				this.model.getGeoposition();
+ 			}
+
+ 		,	renderMarker: function(report){
+
+ 				var _this = this;
+
+    			var position = new google.maps.LatLng(
+    				Number(report.get('location').latitude),
+    				Number(report.get('location').longitude)
+    			);
+
+    			if( _this.map == null )
+	 				this.setCanvas( function(){
+		 				// Init map canvas
+		 				_this.setMap();
+		 				_this.removeMarkers();
+						//_this.setMarkers( _this.symptoms );
+						_this.model.get('callbacks').setPosition = _this.centerUser;
+						_this.model.getGeoposition();
+
+						_renderMarker();
+
+	 				});
+	 			else
+	 				_renderMarker();
+    				
+
+    			function _renderMarker(){
+
+	    			var image = new google.maps.MarkerImage(imagePath + 'pins/' + report.get('subtype') + '.svg',
+					null, null, null, new google.maps.Size(64,64));
+
+	    			_this.bounds.extend(position);
+
+	        		var marker = new google.maps.Marker({
+	        			position: position,
+	        			map: _this.map,
+	        			icon: image
+	        		});
+
+	        		_this.markers.push( marker );
+    			}
+
+
  			}
 
  	});
@@ -2202,6 +2255,8 @@ window.Aircheck.app = {
 	 				'showLevels',
 	 				'setLevel'
 	 			);
+
+	 			socket.on('report get', this.onReport);
  			}
 
 
@@ -2338,6 +2393,20 @@ window.Aircheck.app = {
 
  				alert('Thank you for your report');
  			}
+
+ 		,	onReport: function(data){
+	 			
+	 			console.log(data);
+
+	 			var report = new app.models.report();
+	 			report.set(data);
+
+	 			if( report.get('type') == 'pollution' )
+	 				app.views.map.pollutions.add(report, { merge: true });
+
+	 			if( report.get('type') == 'symptoms' )
+	 				app.views.map.symptoms.add(report, { merge: true });
+	 		}
 
  	});
 
