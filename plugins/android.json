@@ -18,6 +18,9 @@
         },
         "cordova-plugin-geolocation": {
             "PACKAGE_NAME": "com.pulzonerds.aircheck"
+        },
+        "cordova-plugin-camera": {
+            "PACKAGE_NAME": "com.pulzonerds.aircheck"
         }
     },
     "dependent_plugins": {

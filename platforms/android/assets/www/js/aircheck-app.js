@@ -1446,7 +1446,8 @@ window.Aircheck.app = {
 
  		,	events: {
  				'click #toggle-menu-button': 'toggleMenu',
- 				'click #toggle-report-menu-button': 'toggleReportMenu'
+ 				'click #toggle-report-menu-button': 'toggleReportMenu',
+ 				'click #back-button': 'clickBackButton'
  			}
 
 
@@ -1464,8 +1465,13 @@ window.Aircheck.app = {
 
 	 			this.panReportMenu();
 	 			this.swipeHideMenu();
+	 			this.setDefaultMenu();
  			}
 
+ 		,	clickBackButton: function(e){
+ 				window.history.back();
+ 				this.setDefaultMenu();
+ 		}
 
  		,	toggleMenu: function( e ){
  				
@@ -1528,6 +1534,12 @@ window.Aircheck.app = {
  				    $('#aircheck-menu-aside').removeClass('active');
  				});
  			}
+ 		, setDefaultMenu: function(){
+ 				var _this = this;	
+
+ 				var html = new EJS({ url: templatePath + 'menu/default.ejs'}).render({});
+ 				submenu.html(html);
+ 		}
 
  	});
 
@@ -1553,7 +1565,8 @@ window.Aircheck.app = {
 
  		,	events: {
  				'click #map-button': 'showMapLayers',
- 				'click #symptoms-subitems-button': 'showSymptomsLayers'
+ 				'click #symptoms-subitems-button': 'showSymptomsLayers',
+ 				'click #locate-button': 'clickLocateButton'
  			}
 
  		,	model: new app.models.location
@@ -1654,6 +1667,12 @@ window.Aircheck.app = {
  				});
 
            }
+
+       ,	clickLocateButton: function(e){
+       			console.log(app.views.user.model.get('location').get('center'));
+				//this.map.setCenter();
+
+ 		}
 
         ,	setMap: function(){
 
@@ -1786,7 +1805,8 @@ window.Aircheck.app = {
  		,	events: {
  				'click #report-button': 'showPollutionLayers',
  				'click #symptoms-button': 'showSymptomsLayers',
- 				'click .report-air-button': 'save'
+ 				'click .report-air-button': 'save',
+ 				'click #camera-button': 'takePhoto'
  			}
 
  		,	model: new app.models.report
@@ -1804,7 +1824,6 @@ window.Aircheck.app = {
 	 			);
  			}
 
-
  		,	showPollutionLayers: function(e){
 
  				e.preventDefault();
@@ -1815,6 +1834,23 @@ window.Aircheck.app = {
  				submenu.html(layers);
  			}
 
+ 		,	takePhoto: function(e){
+ 				
+ 				navigator.camera.getPicture(onSuccessPhoto, onFailPhoto, { 
+	            	quality: 4,
+	            	destinationType: Camera.DestinationType.FILE_URI
+	        	});
+ 			}
+
+ 		,	onSuccessPhoto: function(imageData){
+ 				alert("algo");
+ 		}
+
+ 		,	onFailPhoto: function(message) {
+    			alert('Failed because: ' + message);
+			}
+
+
  		,	showSymptomsLayers: function(e){
 
  				e.preventDefault();
@@ -1824,7 +1860,6 @@ window.Aircheck.app = {
 
  				submenu.html(layers);
  			}
-
 
  		,	save: function(e){
 
@@ -1846,10 +1881,21 @@ window.Aircheck.app = {
  						longitude: position.coords.longitude
  					});
 
- 					_this.model.save();
+ 					_this.model.save(_this.model.attributes,{
+ 						success: _this.onSuccessSave,
+ 						error: _this.onError
+ 					});
  				}
 
  				location.getGeoposition();
+ 			}
+
+ 		,	onSuccessSave: function( model, response, options ){
+
+ 				app.views.layout.hideMenu();
+                app.views.layout.hideReportMenu();
+
+ 				alert('Thank you for your report');
  			}
 
  	});
@@ -1940,7 +1986,7 @@ window.Aircheck.app = {
  				var _this = this;
 
  				var data = helper.formToJson( this.registerForm );
- 				
+
  				this.model.set( data );
 
  				this.model.save(this.model.attributes, {

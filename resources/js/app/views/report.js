@@ -16,7 +16,8 @@
  		,	events: {
  				'click #report-button': 'showPollutionLayers',
  				'click #symptoms-button': 'showSymptomsLayers',
- 				'click .report-air-button': 'save'
+ 				'click .report-air-button': 'save',
+ 				'click #camera-button': 'takePhoto'
  			}
 
  		,	model: new app.models.report
@@ -34,7 +35,6 @@
 	 			);
  			}
 
-
  		,	showPollutionLayers: function(e){
 
  				e.preventDefault();
@@ -45,6 +45,23 @@
  				submenu.html(layers);
  			}
 
+ 		,	takePhoto: function(e){
+ 				
+ 				navigator.camera.getPicture(onSuccessPhoto, onFailPhoto, { 
+	            	quality: 4,
+	            	destinationType: Camera.DestinationType.FILE_URI
+	        	});
+ 			}
+
+ 		,	onSuccessPhoto: function(imageData){
+ 				alert("algo");
+ 		}
+
+ 		,	onFailPhoto: function(message) {
+    			alert('Failed because: ' + message);
+			}
+
+
  		,	showSymptomsLayers: function(e){
 
  				e.preventDefault();
@@ -54,7 +71,6 @@
 
  				submenu.html(layers);
  			}
-
 
  		,	save: function(e){
 

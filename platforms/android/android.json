@@ -23,6 +23,10 @@
                         {
                             "xml": "<feature name=\"Geolocation\"><param name=\"android-package\" value=\"org.apache.cordova.geolocation.Geolocation\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Camera\"><param name=\"android-package\" value=\"org.apache.cordova.camera.CameraLauncher\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -37,6 +41,10 @@
                         {
                             "xml": "<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />",
                             "count": 2
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
+                            "count": 1
                         }
                     ]
                 }
@@ -57,6 +65,9 @@
             "PACKAGE_NAME": "com.pulzonerds.aircheck"
         },
         "cordova-plugin-geolocation": {
+            "PACKAGE_NAME": "com.pulzonerds.aircheck"
+        },
+        "cordova-plugin-camera": {
             "PACKAGE_NAME": "com.pulzonerds.aircheck"
         }
     },
@@ -113,6 +124,34 @@
             "file": "plugins/cordova-plugin-geolocation/www/PositionError.js",
             "id": "cordova-plugin-geolocation.PositionError",
             "runs": true
+        },
+        {
+            "file": "plugins/cordova-plugin-camera/www/CameraConstants.js",
+            "id": "cordova-plugin-camera.Camera",
+            "clobbers": [
+                "Camera"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-camera/www/CameraPopoverOptions.js",
+            "id": "cordova-plugin-camera.CameraPopoverOptions",
+            "clobbers": [
+                "CameraPopoverOptions"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-camera/www/Camera.js",
+            "id": "cordova-plugin-camera.camera",
+            "clobbers": [
+                "navigator.camera"
+            ]
+        },
+        {
+            "file": "plugins/cordova-plugin-camera/www/CameraPopoverHandle.js",
+            "id": "cordova-plugin-camera.CameraPopoverHandle",
+            "clobbers": [
+                "CameraPopoverHandle"
+            ]
         }
     ],
     "plugin_metadata": {
@@ -120,6 +159,7 @@
         "cordova-plugin-device-motion": "1.2.1-dev",
         "cordova-plugin-device-orientation": "1.0.3-dev",
         "cordova-plugin-compat": "1.0.0",
-        "cordova-plugin-geolocation": "2.1.1-dev"
+        "cordova-plugin-geolocation": "2.1.1-dev",
+        "cordova-plugin-camera": "2.2.0"
     }
 }
