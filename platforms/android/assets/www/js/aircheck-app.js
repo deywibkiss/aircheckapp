@@ -1123,7 +1123,13 @@ window.Aircheck.app = {
 
 				if ( navigator.geolocation ) {
 					
-					navigator.geolocation.getCurrentPosition( _this.get('callbacks').setPosition, function(){ alert( 'error!' ); } );
+					navigator.geolocation.getCurrentPosition(
+						_this.get('callbacks').setPosition,
+						function(){
+							// alert( 'location!' );
+						},
+						 {timeout: 1000000, enableHighAccuracy: true, maximumAge: 75000}
+					);
 
 				} else {
 					
@@ -1808,10 +1814,13 @@ window.Aircheck.app = {
 
  		,	setCanvas: function( callback ){
 
- 				if( $('#map-canvas').length <= 0 ){
+ 				$('#map-canvas').remove();
+ 				$('#heatmap-canvas').remove();
+
+ 				// if( $('#map-canvas').length <= 0 ){
 	 				var html = new EJS({ url: templatePath + 'map/default.ejs'}).render({});
 	 				content.html(html);
- 				}
+ 				//}
 
  				if( typeof callback == 'function')
  					callback.call();
@@ -1870,28 +1879,14 @@ window.Aircheck.app = {
         		var _this = this;
 
  				// Init map canvas
- 				if( _this.map == null ){
+ 				//if( _this.map == null ){
 	 				_this.canvas = $('#map-canvas')[0];
 
 					_this.map = new google.maps.Map( _this.canvas, {
 						zoom: 5,
 						center: _this.model.get('center')
 					});
-
-					/*
-					**
-					MODIS_Terra_Cloud_Top_Temp_Day		//Cloudy
-					MODIS_Terra_Aerosol		//Aereosol
-					MLS_CO_215hPa_Day	//Dioxido de Carbono
-					MODIS_Terra_Cloud_Top_Temp_Day //Temperatura
-					MLS_HNO3_46hPa_Day //Acido Nitrico
-					AIRS_Precipitation_Day
-					AMSR2_Wind_Speed_Day //Velocidad del viento
-
-					*/
-
-					//_this.setLayer( "AMSR2_Wind_Speed_Day" );
- 				}
+ 				//}
         	}
 
     	,	setLayer: function(product){
@@ -2618,13 +2613,16 @@ window.Aircheck.app = {
 
                     app.views.map.pollutions.once( 'sync', function(){
                         app.views.map.symptoms.fetch({
-                            error: function(){ alert( 'error!' ); }
+                            // error: function(){ //alert( 'error!' );
+                            // }
                         });
                     });
                     
 
                     app.views.map.pollutions.fetch({
-                        error: function(){ alert( 'error!' ); }
+                        // error: function(){
+                        //     //alert( 'error!' );
+                        // }
                     });
 
                 });
@@ -2636,14 +2634,16 @@ window.Aircheck.app = {
 
         ,   renderMapPollution: function(){
 
+                console.log('here');
+
                 // Pollutions collection
-                app.views.map.pollutions.on( 'sync', app.views.map.renderPollutionMap);
+                //app.views.map.pollutions.once( 'sync', app.views.map.renderPollutionMap);
 
                 app.views.layout.hideMenu();
                 app.views.layout.hideReportMenu();
 
                 app.views.map.pollutions.fetch({
-                    error: function(){ alert( 'error!' ); }
+                    //error: function(){ alert( 'error!' );}
                 });
             }
 
@@ -2651,26 +2651,27 @@ window.Aircheck.app = {
         ,   renderMapSymptoms: function(){
 
                 // Symptoms collection
-                app.views.map.symptoms.on( 'sync', app.views.map.renderSymptomsMap);
+                //app.views.map.symptoms.once( 'sync', app.views.map.renderSymptomsMap);
 
                 app.views.layout.hideMenu();
                 app.views.layout.hideReportMenu();
+                sublayers.removeClass('active');
 
                 app.views.map.symptoms.fetch({
-                    error: function(){ alert( 'error!' ); }
+                    //error: function(){ alert( 'error!' ); }
                 });
             }
 
         ,   renderHeatmapPollution: function(){
 
                 // Pollutions collection
-                //app.views.heatmap.pollutions.on( 'sync', app.views.heatmap.renderPollutionHeatmap);
+                app.views.heatmap.pollutions.once( 'sync', app.views.heatmap.renderPollutionHeatmap);
 
                 app.views.layout.hideMenu();
                 app.views.layout.hideReportMenu();
 
                 app.views.heatmap.pollutions.fetch({
-                    error: function(){ alert( 'error!' ); }
+                    //error: function(){ alert( 'error!' ); }
                 });
             }
 
@@ -2718,7 +2719,8 @@ window.Aircheck.app = {
 
     Backbone.history.start({
         root: '/',
-        pushState: false
+        pushState: false,
+        silent: false
     });
 
 

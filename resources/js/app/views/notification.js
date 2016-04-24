@@ -22,7 +22,9 @@
  		,	messages: {
  				"fire": "Many fires occur in the area, avoid transit through this place",
  				"traffic": "Much traffic congestion, can cause inflammation of the airways",
- 				"dust": "Intermediate risk. Do not inhale gases released. Use respiratory protection. Maintain a safe distance."
+ 				"dust": "Intermediate risk. Do not inhale gases released. Use respiratory protection. Maintain a safe distance.",
+ 				"smoke": "It is located in an area with high content of CO2 and NO2, No permanecer en la zona más de 1 hora.",
+ 				"drowning": "It is in a risk zone (high CO2 content, high content of NO2). Get out as soon as posible "
  			}
 
  		,	model: new app.models.notification
