@@ -32,8 +32,8 @@
                         MAP
                     </div>
                     <div class="col-xs-3 col-sm-1">
-                        <button type="button" class="menu-button">
-                            <i class="glyphicon glyphicon-bell"></i>
+                        <button type="button" id="notification-icon" class="menu-button">
+                            <i class="air-icon-bell"></i>
                         </button>
                     </div>
                 </div>
@@ -41,6 +41,7 @@
 
         </nav>
         
+        <!-- Menu aside -->
         <nav id="aircheck-menu-aside">
             <ul>
                 <li>
@@ -52,6 +53,7 @@
             </ul>
         </nav>
 
+        <!-- SubLayers -->
         <nav id="aircheck-sublayers" class="container-fluid"></nav>
         
         <div id="content-wrapper">
@@ -64,13 +66,18 @@
                             <i class="air-icon-arrow-top"></i>
                         </button>
                         <button type="button" id="locate-button" class="float-btn btn-default btn-pos">
-                            <i class="air-icon-arrow-top"></i>
+                            <i class="air-icon-radar"></i>
                         </button>
+
+                        <!-- <button type="button" id="show-notification-button" class="float-btn btn-default btn-notif">
+                            <i class="air-icon-radar"></i>
+                        </button> -->
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- Report menu -->
         <nav id="aircheck-report-menu">
             <button type="button" id="toggle-report-menu-button">
                 <i class="air-icon-arrow-top"></i>
@@ -81,7 +88,31 @@
             </div>
         </nav>
 
+        <!-- Notifications -->
+        <nav id="notifications">
+        </nav>
+
+        <!-- Loading -->
+        <div id="loading">
+            <div id="bowlG">
+                <div id="bowl_ringG">
+                    <div class="ball_holderG">
+                        <div class="ballG">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- App -->
         <script src="js/aircheck-app.js"></script>
+        <script type="text/javascript">
+            socket = io(apiURL);
+
+            socket.on('report get', function(data){
+                console.log('socket');
+                console.log(data);
+            });
+        </script>
     </body>
 </html>

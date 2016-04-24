@@ -103,12 +103,25 @@
  				    $('#aircheck-menu-aside').removeClass('active');
  				});
  			}
- 		, setDefaultMenu: function(){
+
+ 		,	setDefaultMenu: function(){
  				var _this = this;	
 
  				var html = new EJS({ url: templatePath + 'menu/default.ejs'}).render({});
  				submenu.html(html);
- 		}
+ 			}
+
+ 		,	showLoading: function(){
+
+ 				$('#loading').show();
+
+ 			}
+
+ 		,	hideLoading: function(){
+
+ 				$('#loading').hide();
+
+ 			}
 
  	});
 

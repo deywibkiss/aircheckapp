@@ -37,6 +37,7 @@ gulp.task('js-libs', function(){
     return gulp.src([
 
         pLibsOrigin + 'jquery.js',
+        pLibsOrigin + 'socket.io-1.4.5.js',
         pLibsOrigin + 'hammer.min.js',
         pLibsOrigin + 'jquery.hammer.js',
         pLibsOrigin + 'underscore-min.js',
@@ -67,6 +68,7 @@ gulp.task('js-backbone-app', function(){
         pAppOrigin + 'models/user.js',
         pAppOrigin + 'models/report-type.js',
         pAppOrigin + 'models/report.js',
+        pAppOrigin + 'models/notification.js',
 
         // Collections
         pAppOrigin + 'collections/*.js',

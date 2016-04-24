@@ -12,6 +12,7 @@
 		,	defaults: {
 				type: '',
 				subtype: '',
+				level: 1,
 				user: null,
 				location: {}
 			}

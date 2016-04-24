@@ -10,6 +10,7 @@ var imagePath = 'img/';
 var content = $('#aircheck-main-content');
 var submenu = $('#aircheck-report-submenu');
 var sublayers = $('#aircheck-sublayers');
+var notifications = $('#notifications');
 
 
 window.Aircheck = {};

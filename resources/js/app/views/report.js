@@ -16,7 +16,10 @@
  		,	events: {
  				'click #report-button': 'showPollutionLayers',
  				'click #symptoms-button': 'showSymptomsLayers',
- 				'click .report-air-button': 'save'
+ 				'click .show-level-button': 'showLevels',
+ 				'click .set-level-button': 'setLevel',
+ 				'click #save-report-button': 'save',
+ 				'click #cancel-report-button': 'cancel'
  			}
 
  		,	model: new app.models.report
@@ -29,8 +32,11 @@
 
 	 				this,
 	 				'save',
+	 				'cancel',
 	 				'showPollutionLayers',
-	 				'showSymptomsLayers'
+	 				'showSymptomsLayers',
+	 				'showLevels',
+	 				'setLevel'
 	 			);
  			}
 
@@ -55,18 +61,44 @@
  				submenu.html(layers);
  			}
 
-
- 		,	save: function(e){
-
+ 		,	showLevels: function(e){
  				e.preventDefault();
 
- 				// Get the type
+ 				// set other attributes
  				var _this = this
  				,	type = $(e.currentTarget).data('type')
  				,	subtype = $(e.currentTarget).data('subtype')
  				,	user = localStorage.getItem('_id');
 
  				this.model.set({ type: type, subtype: subtype, user: user });
+
+ 				var levels = new EJS({url: templatePath + 'report/levels.ejs'}).render();
+
+ 				submenu.html(levels);
+
+ 			}
+
+
+ 		,	setLevel: function(e){
+
+ 				e.preventDefault();
+
+ 				// Reset active
+ 				$('.set-level-button').removeClass('active');
+ 				$(e.currentTarget).addClass('active');
+
+ 				var level = $(e.currentTarget).data('level');
+ 				this.model.set('level', level );
+
+ 				console.log( this.model.attributes );
+ 			}
+
+
+ 		,	save: function(e){
+
+ 				e.preventDefault();
+
+ 				var _this = this;
 
  				var location = new app.models.location();
  				location.get('callbacks').setPosition = function(position){
@@ -83,6 +115,14 @@
  				}
 
  				location.getGeoposition();
+ 			}
+
+ 		,	cancel: function(e){
+ 				e.preventDefault();
+
+ 				this.model.clear().set(this.model.defaults);
+
+ 				app.views.layout.setDefaultMenu();
  			}
 
  		,	onSuccessSave: function( model, response, options ){

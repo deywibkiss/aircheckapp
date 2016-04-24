@@ -16,7 +16,7 @@
  		,	events: {
  				'click #map-button': 'showMapLayers',
  				'click #symptoms-subitems-button': 'showSymptomsLayers',
- 				'click #locate-button': 'clickLocateButton'
+ 				'click #locate-button': 'refreshPosition'
  			}
 
  		,	model: new app.models.location
@@ -118,12 +118,6 @@
 
            }
 
-       ,	clickLocateButton: function(e){
-       			console.log(app.views.user.model.get('location').get('center'));
-				//this.map.setCenter();
-
- 		}
-
         ,	setMap: function(){
 
         		var _this = this;
@@ -189,7 +183,8 @@
         		var marker = new google.maps.Marker({
         			position: _this.model.get('center'),
         			map: _this.map,
-        			icon: image
+        			icon: image,
+        			zIndex: 99999
         		});
 
         		this.map.setCenter( this.model.get('center') );
@@ -228,6 +223,11 @@
 				        this.setZoom(14);
 				        google.maps.event.removeListener(_this.boundListener);
 				    });
+ 			}
+
+ 		,	refreshPosition: function(e){
+ 				this.model.get('callbacks').setPosition = this.centerUser;
+ 				this.model.getGeoposition();
  			}
 
  	});

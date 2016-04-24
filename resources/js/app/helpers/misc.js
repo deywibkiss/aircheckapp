@@ -33,6 +33,8 @@
 	 			// Backbone custom functions
 	 			this.addModelReset();
 	 			this.addCollectionFilter();
+
+	 			this.ajaxSetup();
 	 		}
 
 	 		/**
@@ -951,6 +953,24 @@
 				        && container.has(e.target).length === 0) // ... nor a descendant of the container
 				    {
 				        container.hide();
+				    }
+				});
+			}
+
+
+			/**
+			* Ajax before send
+			*
+			*/
+		,	ajaxSetup: function(){
+
+				$.ajaxSetup({
+				    beforeSend: function() {
+				        app.views.layout.showLoading();
+				    },
+
+				    complete: function(){
+				    	app.views.layout.hideLoading();
 				    }
 				});
 			}
