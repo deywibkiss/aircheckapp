@@ -10,6 +10,7 @@ var imagePath = 'img/';
 var content = $('#aircheck-main-content');
 var submenu = $('#aircheck-report-submenu');
 var sublayers = $('#aircheck-sublayers');
+var notifications = $('#notifications');
 
 
 window.Aircheck = {};
@@ -57,6 +58,8 @@ window.Aircheck.app = {
 	 			// Backbone custom functions
 	 			this.addModelReset();
 	 			this.addCollectionFilter();
+
+	 			this.ajaxSetup();
 	 		}
 
 	 		/**
@@ -980,6 +983,24 @@ window.Aircheck.app = {
 			}
 
 
+			/**
+			* Ajax before send
+			*
+			*/
+		,	ajaxSetup: function(){
+
+				$.ajaxSetup({
+				    beforeSend: function() {
+				        app.views.layout.showLoading();
+				    },
+
+				    complete: function(){
+				    	app.views.layout.hideLoading();
+				    }
+				});
+			}
+
+
 
  	};
 
@@ -1286,6 +1307,7 @@ window.Aircheck.app = {
 		,	defaults: {
 				type: '',
 				subtype: '',
+				level: 1,
 				user: null,
 				location: {}
 			}
@@ -1322,6 +1344,45 @@ window.Aircheck.app = {
 				// var _this = this;
 
 				// return alert( _this.lang[error] );
+
+			}
+
+	});
+
+})(jQuery, this, this.document, window.Aircheck.app, undefined);
+( function($, window, document, app ){
+	
+
+	'use-strict';
+
+	app.models.notification = Backbone.Model.extend({
+
+			urlRoot: apiURL + "notification"
+
+		,	idAttribute: "_id"
+
+		,	defaults: {
+				type: '',
+				message: null,
+				info: ''
+			}
+
+		,	required: []
+
+		,	errors: []
+
+		,	initialize: function(){
+
+				this.on( "invalid", this.onInvalid, this );
+
+			}
+
+		,	validate: function( attrs, options ){
+
+
+			}
+
+		,	onInvalid: function( model, error ){
 
 			}
 
@@ -1446,7 +1507,8 @@ window.Aircheck.app = {
 
  		,	events: {
  				'click #toggle-menu-button': 'toggleMenu',
- 				'click #toggle-report-menu-button': 'toggleReportMenu'
+ 				'click #toggle-report-menu-button': 'toggleReportMenu',
+ 				'click #back-button': 'clickBackButton'
  			}
 
 
@@ -1464,8 +1526,13 @@ window.Aircheck.app = {
 
 	 			this.panReportMenu();
 	 			this.swipeHideMenu();
+	 			this.setDefaultMenu();
  			}
 
+ 		,	clickBackButton: function(e){
+ 				window.history.back();
+ 				this.setDefaultMenu();
+ 		}
 
  		,	toggleMenu: function( e ){
  				
@@ -1529,6 +1596,25 @@ window.Aircheck.app = {
  				});
  			}
 
+ 		,	setDefaultMenu: function(){
+ 				var _this = this;	
+
+ 				var html = new EJS({ url: templatePath + 'menu/default.ejs'}).render({});
+ 				submenu.html(html);
+ 			}
+
+ 		,	showLoading: function(){
+
+ 				$('#loading').show();
+
+ 			}
+
+ 		,	hideLoading: function(){
+
+ 				$('#loading').hide();
+
+ 			}
+
  	});
 
 
@@ -1553,7 +1639,8 @@ window.Aircheck.app = {
 
  		,	events: {
  				'click #map-button': 'showMapLayers',
- 				'click #symptoms-subitems-button': 'showSymptomsLayers'
+ 				'click #symptoms-subitems-button': 'showSymptomsLayers',
+ 				'click #locate-button': 'refreshPosition'
  			}
 
  		,	model: new app.models.location
@@ -1720,7 +1807,8 @@ window.Aircheck.app = {
         		var marker = new google.maps.Marker({
         			position: _this.model.get('center'),
         			map: _this.map,
-        			icon: image
+        			icon: image,
+        			zIndex: 99999
         		});
 
         		this.map.setCenter( this.model.get('center') );
@@ -1761,6 +1849,11 @@ window.Aircheck.app = {
 				    });
  			}
 
+ 		,	refreshPosition: function(e){
+ 				this.model.get('callbacks').setPosition = this.centerUser;
+ 				this.model.getGeoposition();
+ 			}
+
  	});
 
 
@@ -1768,6 +1861,69 @@ window.Aircheck.app = {
 
 
  })(jQuery, this, this.document, window.Aircheck.app, undefined);
+/*
+ |--------------------------------------------------------------------------
+ | Notification View
+ |--------------------------------------------------------------------------
+ |
+ | Allows to control de GUI of notifications
+ |
+ |
+ */
+ ( function( $, window, document, app, helper ){
+
+ 	var NotificationView = Backbone.View.extend({
+
+ 			el: $( 'body' )
+
+ 		,	events: {
+ 			}
+
+ 		,	model: new app.models.notification
+
+ 		,	initialize: function(){
+
+	 			// Bind all events so this variable could
+	 			// be the view in function scopes
+	 			_.bindAll(
+
+	 				this,
+	 				'renderSymptom',
+	 				'showNotification'
+	 			);
+ 			}
+
+ 			/**
+ 			* Shows the login page
+ 			*
+ 			*/
+ 		,	renderSymptom: function(){
+
+ 				var _this = this;	
+
+ 				var html = new EJS({ url: templatePath + 'notifications/symptoms.ejs'}).render({});
+ 				
+ 				return html;
+ 			}
+
+ 		,	showNotification: function(e){
+
+ 				e.preventDefault();
+
+ 				var notification = this.renderSymptom();
+
+ 				setTimeout( function(){
+ 					notifications.append(notification);
+ 				}, 1000);
+ 			}
+
+ 	});
+
+
+ 	app.views.user = new NotificationView();
+
+
+ })(jQuery, this, this.document, window.Aircheck.app, window.Aircheck.app.helpers.main, undefined);
 /*
  |--------------------------------------------------------------------------
  | Report View
@@ -1786,7 +1942,10 @@ window.Aircheck.app = {
  		,	events: {
  				'click #report-button': 'showPollutionLayers',
  				'click #symptoms-button': 'showSymptomsLayers',
- 				'click .report-air-button': 'save'
+ 				'click .show-level-button': 'showLevels',
+ 				'click .set-level-button': 'setLevel',
+ 				'click #save-report-button': 'save',
+ 				'click #cancel-report-button': 'cancel'
  			}
 
  		,	model: new app.models.report
@@ -1799,8 +1958,11 @@ window.Aircheck.app = {
 
 	 				this,
 	 				'save',
+	 				'cancel',
 	 				'showPollutionLayers',
-	 				'showSymptomsLayers'
+	 				'showSymptomsLayers',
+	 				'showLevels',
+	 				'setLevel'
 	 			);
  			}
 
@@ -1825,18 +1987,44 @@ window.Aircheck.app = {
  				submenu.html(layers);
  			}
 
-
- 		,	save: function(e){
-
+ 		,	showLevels: function(e){
  				e.preventDefault();
 
- 				// Get the type
+ 				// set other attributes
  				var _this = this
  				,	type = $(e.currentTarget).data('type')
  				,	subtype = $(e.currentTarget).data('subtype')
  				,	user = localStorage.getItem('_id');
 
  				this.model.set({ type: type, subtype: subtype, user: user });
+
+ 				var levels = new EJS({url: templatePath + 'report/levels.ejs'}).render();
+
+ 				submenu.html(levels);
+
+ 			}
+
+
+ 		,	setLevel: function(e){
+
+ 				e.preventDefault();
+
+ 				// Reset active
+ 				$('.set-level-button').removeClass('active');
+ 				$(e.currentTarget).addClass('active');
+
+ 				var level = $(e.currentTarget).data('level');
+ 				this.model.set('level', level );
+
+ 				console.log( this.model.attributes );
+ 			}
+
+
+ 		,	save: function(e){
+
+ 				e.preventDefault();
+
+ 				var _this = this;
 
  				var location = new app.models.location();
  				location.get('callbacks').setPosition = function(position){
@@ -1846,10 +2034,29 @@ window.Aircheck.app = {
  						longitude: position.coords.longitude
  					});
 
- 					_this.model.save();
+ 					_this.model.save(_this.model.attributes,{
+ 						success: _this.onSuccessSave,
+ 						error: _this.onError
+ 					});
  				}
 
  				location.getGeoposition();
+ 			}
+
+ 		,	cancel: function(e){
+ 				e.preventDefault();
+
+ 				this.model.clear().set(this.model.defaults);
+
+ 				app.views.layout.setDefaultMenu();
+ 			}
+
+ 		,	onSuccessSave: function( model, response, options ){
+
+ 				app.views.layout.hideMenu();
+                app.views.layout.hideReportMenu();
+
+ 				alert('Thank you for your report');
  			}
 
  	});
@@ -1940,7 +2147,7 @@ window.Aircheck.app = {
  				var _this = this;
 
  				var data = helper.formToJson( this.registerForm );
- 				
+
  				this.model.set( data );
 
  				this.model.save(this.model.attributes, {
