@@ -50,6 +50,10 @@
                         <span>Settings</span>
                     </a>
                 </li>
+                <li id="takePhoto">
+                <a>
+                    <span>Camera</span></a>
+                </li>
             </ul>
         </nav>
 
@@ -83,6 +87,31 @@
         </nav>
 
         <!-- App -->
+        <script type="text/javascript" src="cordova.js"></script>
         <script src="js/aircheck-app.js"></script>
+
+        <script>
+
+        alert("abriendl");
+
+        navigator.camera.getPicture(onSuccess, onFail, { quality: 50,
+            destinationType: Camera.DestinationType.DATA_URL
+        });
+
+        function onSuccess(imageData) {
+            var image = document.getElementById('myImage');
+            alert("bien");
+        }
+
+        function onFail(message) {
+            alert('Failed because: ' + message);
+        }
+
+
+
+        </script>
+
+
+
     </body>
 </html>

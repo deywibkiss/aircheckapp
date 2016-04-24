@@ -1806,7 +1806,7 @@ window.Aircheck.app = {
  				'click #report-button': 'showPollutionLayers',
  				'click #symptoms-button': 'showSymptomsLayers',
  				'click .report-air-button': 'save',
- 				'click #camera-button': 'openCamera'
+ 				'click #camera-button': 'takePhoto'
  			}
 
  		,	model: new app.models.report
@@ -1834,17 +1834,20 @@ window.Aircheck.app = {
  				submenu.html(layers);
  			}
 
- 		,	openCamera: function(e){
- 				navigator.camera.getPicture(onSuccess, onFail, { quality: 50,destinationType: Camera.DestinationType.FILE_URI });
+ 		,	takePhoto: function(e){
+ 				
+ 				navigator.camera.getPicture(onSuccessPhoto, onFailPhoto, { 
+	            	quality: 4,
+	            	destinationType: Camera.DestinationType.FILE_URI
+	        	});
  			}
 
- 		,	onSuccessPhoto: function(imageURI){
- 				var image = document.getElementById('myImage');
-    			image.src = imageURI;
+ 		,	onSuccessPhoto: function(imageData){
+ 				alert("algo");
  		}
- 		
- 		,	onFailPhoto: function() {
-    			
+
+ 		,	onFailPhoto: function(message) {
+    			alert('Failed because: ' + message);
 			}
 
 

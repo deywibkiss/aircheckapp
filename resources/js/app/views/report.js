@@ -16,8 +16,8 @@
  		,	events: {
  				'click #report-button': 'showPollutionLayers',
  				'click #symptoms-button': 'showSymptomsLayers',
- 				'click .report-air-button': 'save',
- 				'click #camera-button': 'takePhoto'
+ 				//'click #camera-button': 'takePhoto',
+ 				'click .report-air-button': 'save'
  			}
 
  		,	model: new app.models.report
@@ -48,7 +48,7 @@
  		,	takePhoto: function(e){
  				
  				navigator.camera.getPicture(onSuccessPhoto, onFailPhoto, { 
-	            	quality: 4,
+	            	quality: 15,
 	            	destinationType: Camera.DestinationType.FILE_URI
 	        	});
  			}
