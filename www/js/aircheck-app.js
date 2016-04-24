@@ -1686,6 +1686,55 @@ window.Aircheck.app = {
 						zoom: 5,
 						center: _this.model.get('center')
 					});
+
+					/*
+					**
+					MODIS_Terra_Cloud_Top_Temp_Day		//Cloudy
+					MODIS_Terra_Aerosol		//Aereosol
+					MLS_CO_215hPa_Day	//Dioxido de Carbono
+					MODIS_Terra_Cloud_Top_Temp_Day //Temperatura
+					MLS_HNO3_46hPa_Day //Acido Nitrico
+					AIRS_Precipitation_Day
+					AMSR2_Wind_Speed_Day //Velocidad del viento
+
+					*/
+
+					_this.setLayer( "AMSR2_Wind_Speed_Day" );
+ 				}
+        	}
+
+    	,	setLayer: function(product){
+
+        		var _this = this;
+
+ 				// Init map canvas
+ 				if( _this.map != null ){
+	 				// var product = "MODIS_Terra_Cloud_Top_Temp_Day";
+
+				    var getTileUrl = function(tile, zoom) {
+
+			    		var hoy = new Date();
+		    			var mes = ("0" + (hoy.getMonth() + 1)).slice(-2)
+
+				        var url = "//map1.vis.earthdata.nasa.gov/wmts-webmerc/" +
+				               product + "/default/" + hoy.getFullYear() + "-"+mes+"-" + hoy.getDate() + "/" +
+				               "GoogleMapsCompatible_Level6/" +
+				                zoom + "/" + tile.y + "/" +
+				                tile.x + ".png";
+
+				        return url;
+				    };
+
+				    var layerOptions = {
+				        alt: product,
+				        getTileUrl: getTileUrl,
+				        name: product,
+				        tileSize: new google.maps.Size(256, 256),
+				        opacity: 0.4
+				    };
+
+				    var imageMapType = new google.maps.ImageMapType(layerOptions);
+				    _this.map.overlayMapTypes.insertAt(0, imageMapType);
  				}
         	}
 
