@@ -51,7 +51,13 @@
 
 				if ( navigator.geolocation ) {
 					
-					navigator.geolocation.getCurrentPosition( _this.get('callbacks').setPosition, function(){ alert( 'error!' ); } );
+					navigator.geolocation.getCurrentPosition(
+						_this.get('callbacks').setPosition,
+						function(){
+							// alert( 'location!' );
+						},
+						 {timeout: 1000000, enableHighAccuracy: true, maximumAge: 75000}
+					);
 
 				} else {
 					

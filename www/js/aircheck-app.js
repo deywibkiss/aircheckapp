@@ -1123,7 +1123,13 @@ window.Aircheck.app = {
 
 				if ( navigator.geolocation ) {
 					
-					navigator.geolocation.getCurrentPosition( _this.get('callbacks').setPosition, function(){ alert( 'error!' ); } );
+					navigator.geolocation.getCurrentPosition(
+						_this.get('callbacks').setPosition,
+						function(){
+							// alert( 'location!' );
+						},
+						 {timeout: 1000000, enableHighAccuracy: true, maximumAge: 75000}
+					);
 
 				} else {
 					
@@ -2618,13 +2624,16 @@ window.Aircheck.app = {
 
                     app.views.map.pollutions.once( 'sync', function(){
                         app.views.map.symptoms.fetch({
-                            error: function(){ alert( 'error!' ); }
+                            // error: function(){ //alert( 'error!' );
+                            // }
                         });
                     });
                     
 
                     app.views.map.pollutions.fetch({
-                        error: function(){ alert( 'error!' ); }
+                        // error: function(){
+                        //     //alert( 'error!' );
+                        // }
                     });
 
                 });
@@ -2643,7 +2652,7 @@ window.Aircheck.app = {
                 app.views.layout.hideReportMenu();
 
                 app.views.map.pollutions.fetch({
-                    error: function(){ alert( 'error!' ); }
+                    //error: function(){ alert( 'error!' );}
                 });
             }
 
@@ -2657,7 +2666,7 @@ window.Aircheck.app = {
                 app.views.layout.hideReportMenu();
 
                 app.views.map.symptoms.fetch({
-                    error: function(){ alert( 'error!' ); }
+                    //error: function(){ alert( 'error!' ); }
                 });
             }
 
@@ -2670,7 +2679,7 @@ window.Aircheck.app = {
                 app.views.layout.hideReportMenu();
 
                 app.views.heatmap.pollutions.fetch({
-                    error: function(){ alert( 'error!' ); }
+                    //error: function(){ alert( 'error!' ); }
                 });
             }
 

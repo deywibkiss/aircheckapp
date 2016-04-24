@@ -47,13 +47,16 @@
 
                     app.views.map.pollutions.once( 'sync', function(){
                         app.views.map.symptoms.fetch({
-                            error: function(){ alert( 'error!' ); }
+                            // error: function(){ //alert( 'error!' );
+                            // }
                         });
                     });
                     
 
                     app.views.map.pollutions.fetch({
-                        error: function(){ alert( 'error!' ); }
+                        // error: function(){
+                        //     //alert( 'error!' );
+                        // }
                     });
 
                 });
@@ -72,7 +75,7 @@
                 app.views.layout.hideReportMenu();
 
                 app.views.map.pollutions.fetch({
-                    error: function(){ alert( 'error!' ); }
+                    //error: function(){ alert( 'error!' );}
                 });
             }
 
@@ -86,7 +89,7 @@
                 app.views.layout.hideReportMenu();
 
                 app.views.map.symptoms.fetch({
-                    error: function(){ alert( 'error!' ); }
+                    //error: function(){ alert( 'error!' ); }
                 });
             }
 
@@ -99,7 +102,7 @@
                 app.views.layout.hideReportMenu();
 
                 app.views.heatmap.pollutions.fetch({
-                    error: function(){ alert( 'error!' ); }
+                    //error: function(){ alert( 'error!' ); }
                 });
             }
 
