@@ -1772,7 +1772,11 @@ window.Aircheck.app = {
 
 					*/
 
+<<<<<<< HEAD
 					//_this.setLayer( "AMSR2_Wind_Speed_Day" );
+=======
+					_this.setLayer( "AMSR2_Wind_Speed_Day" );
+>>>>>>> master
  				}
         	}
 
